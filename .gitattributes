@@ -1,0 +1,4 @@
+# .gitattributes
+
+# Set the line ending style for yarn.lock to LF
+yarn.lock text eol=lf
