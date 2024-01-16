@@ -37,11 +37,18 @@ function Login() {
             console.log(response);
 
             if (response.ok) {
+                const refresh = response.headers.get("refresh");
+                console.log( "refresh : " + refresh );
+                const access = response.headers.get("access");
+                console.log( "access : " + access );
+                
+                console.log( response.headers );
+                
                 const data = await response.json();
                 const accessToken = data.accessToken;
                 localStorage.setItem('accessToken', accessToken);
                 console.log('로그인 성공');
-                alert('로그인 성공');
+                //alert('로그인 성공');
                 history.push('/');
             } else {
                 console.error('로그인 실패');
