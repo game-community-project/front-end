@@ -25,6 +25,7 @@ function TopNav() {
 						<Nav.Link><NavLink to='/console_game'>콘솔게임</NavLink></Nav.Link>
 						<Nav.Link><NavLink to='/mobile_game'>모바일게임</NavLink></Nav.Link>
 						<Nav.Link><NavLink to='/request'>요청</NavLink></Nav.Link>
+						<Nav.Link><NavLink to='/admin'>임시관리자링크</NavLink></Nav.Link>
 					</Nav>
 					<Form className="d-flex">
 						<Form.Control
