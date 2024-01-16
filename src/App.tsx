@@ -7,6 +7,7 @@ import TopNav from './layout/TopNav';
 import Request from './pages/Request';
 import Board from './pages/board/Board';
 import Post from './pages/board/Post';
+import Signup from './pages/Signup';
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                 <Route path="/api/posts/:postId" Component={Post} />
                 <Route path="/request" Component={Request} />
                 <Route path='/*' element={'찾을 수 없는 페이지 입니다.'} />
+                <Route path='/signup' Component={Signup} />
             </Routes>
         </BrowserRouter>
     );

@@ -9,7 +9,7 @@ function TopNav() {
 				<Navbar.Collapse id="navbarScroll">
 					<Nav
 						className="me-auto my-2 my-lg-0"
-						style={{ maxHeight: '500px' }}
+						style={{ maxHeight: '400px', margin: '10 auto 10 auto' }}
 						navbarScroll
 					>
 						<Nav.Link><NavLink to='/'>Home</NavLink></Nav.Link>
@@ -28,13 +28,8 @@ function TopNav() {
 						<Nav.Link><NavLink to='/request'>요청</NavLink></Nav.Link>
 					</Nav>
 					<Form className="d-flex">
-						<Form.Control
-							type="search"
-							placeholder="Search"
-							className="me-2"
-							aria-label="Search"
-						/>
-						<Button variant="outline-success">Search</Button>
+						<Nav.Link><NavLink to='/signup'>회원가입</NavLink></Nav.Link>
+						<Nav.Link><NavLink to='/login'>로그인</NavLink></Nav.Link>
 					</Form>
 				</Navbar.Collapse>
 			</Container>
