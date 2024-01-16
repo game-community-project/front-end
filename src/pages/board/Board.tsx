@@ -23,7 +23,7 @@ const Board: React.FC = () => {
         board.map((board: BoardDto)=>
           <Row>
             <Col>{board.postId}</Col>
-            <Col><Link to={`/pc/lol/${board.postId}`}>{board.postTitle}</Link></Col>
+            <Col><Link to={`/api/posts/${board.postId}`}>{board.postTitle}</Link></Col>
             <Col>{board.postAuthor}</Col>
             <Col>{board.createdAt}</Col>
           </Row>)
