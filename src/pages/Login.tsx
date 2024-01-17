@@ -1,10 +1,12 @@
 import { createBrowserHistory } from '@remix-run/router';
 import React, { useState } from 'react';
 import { Form, FormCheck, FormControl, InputGroup, Col, Row, Button } from "react-bootstrap";
+import { useNavigate } from 'react-router-dom';
 
 const history = createBrowserHistory();
 
 function Login() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [formData, setFormData] = useState({
         email: "",
@@ -38,18 +40,16 @@ function Login() {
 
             if (response.ok) {
                 const refresh = response.headers.get("refresh");
-                console.log( "refresh : " + refresh );
                 const access = response.headers.get("access");
-                console.log( "access : " + access );
+                localStorage.setItem('accessToken', access?access:'');
+                localStorage.setItem('refreshToken', refresh?refresh:'');
                 
-                console.log( response.headers );
-                
-                const data = await response.json();
-                const accessToken = data.accessToken;
-                localStorage.setItem('accessToken', accessToken);
+                console.log( response.json() );
                 console.log('로그인 성공');
-                //alert('로그인 성공');
-                history.push('/');
+
+                
+
+                navigate("/");
             } else {
                 console.error('로그인 실패');
                 alert('로그인 실패, 다시 시도해주세요.');
@@ -61,6 +61,7 @@ function Login() {
     // 취소 버튼 : 돌아가기
     const Cancel = () => {
         console.log("취소하기")
+        navigate("/");
     };
 
     return (
