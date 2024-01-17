@@ -11,6 +11,8 @@ import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Admin from './pages/admin/Admin';
 import ReportedPosts from './pages/admin/ReportedPosts';
+import MyPage from './pages/user/MyPage';
+import ProfileModify from './pages/user/ProfileModify';
 
 function App() {
     return (
@@ -27,6 +29,8 @@ function App() {
                 <Route path='/*' element={'찾을 수 없는 페이지 입니다.'} />
                 <Route path='/signup' Component={Signup} />
                 <Route path='/login' Component={Login} />
+                <Route path='/my_page' Component={MyPage} />
+                <Route path='/profile_modify' Component={ProfileModify} />
             </Routes>
         </BrowserRouter>
     );
