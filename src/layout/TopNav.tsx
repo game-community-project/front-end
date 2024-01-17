@@ -26,7 +26,7 @@ function TopNav() {
 							</NavDropdown.Item>
 						</NavDropdown>
 						<Nav.Link><NavLink to='/request'>요청</NavLink></Nav.Link>
-						<Nav.Link><NavLink to='/admin'>임시관리자링크</NavLink></Nav.Link>
+						<Nav.Link><NavLink to='/admin'>관리자</NavLink></Nav.Link>
 					</Nav>
 					<Form className="d-flex">
 						<Nav.Link><NavLink to='/signup'>회원가입</NavLink></Nav.Link>

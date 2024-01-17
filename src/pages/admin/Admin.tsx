@@ -5,8 +5,6 @@ import 'react-datepicker/dist/react-datepicker.module.css'
 import axios from "axios";
 
 function Admin() {
-	login();
-
 	return (
 		<Container>
 			<br/>
@@ -52,16 +50,6 @@ function ButtonReportedPosts() {
 	)
 }
 
-function login() {
-	axios.post( "http://localhost:8080/api/users/login", {
-		email: "test@test.com",
-		password: "1234"
-	})
-	.then( response => {
-		console.log( response.headers.toJSON?.toString() )
-	});
-}
-
 function FormUserInfo() {
 	return (
 		<Container>
@@ -104,3 +92,4 @@ function FormUserInfo() {
 }
 
 export default Admin;
+ 
