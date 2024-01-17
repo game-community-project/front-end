@@ -2,6 +2,7 @@ import { createBrowserHistory } from '@remix-run/router';
 import React, { useState } from 'react';
 import { Form, FormCheck, FormControl, InputGroup, Col, Row, Button } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const history = createBrowserHistory();
 
@@ -15,7 +16,7 @@ function Login() {
 
     const handleChange = (e: { target: { name: any; value: any; }; }) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({
+        setFormData((prevData) => ({    
           ...prevData,
           [name]: value,
         }));
@@ -25,7 +26,7 @@ function Login() {
     const Confirm = async () => {
         try {
             console.log("formData: formData", formData);
-            const response = await fetch('http://localhost:8080/api/users/login', {
+            const response = await fetch(`http://51.21.48.160:8080/api/users/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -39,6 +40,7 @@ function Login() {
             console.log(response);
 
             if (response.ok) {
+
                 const refresh = response.headers.get("refresh");
                 const access = response.headers.get("access");
                 localStorage.setItem('accessToken', access?access:'');
@@ -46,9 +48,7 @@ function Login() {
                 
                 console.log( response.json() );
                 console.log('로그인 성공');
-
-                
-
+        
                 navigate("/");
             } else {
                 console.error('로그인 실패');

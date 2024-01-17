@@ -30,6 +30,7 @@ function TopNav() {
 					</Nav>
 					<Form className="d-flex">
 						<Nav.Link><NavLink to='/signup'>회원가입</NavLink></Nav.Link>
+						<span className="mx-2"></span>
 						<Nav.Link><NavLink to='/login'>로그인</NavLink></Nav.Link>
 						<Nav.Link><NavLink to='/my_page'>내 정보</NavLink></Nav.Link>
 					</Form>
