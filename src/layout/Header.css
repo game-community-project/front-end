@@ -1,0 +1,20 @@
+.custom-header {
+    display: inline-block;
+    padding: 15px;
+    background-color: red;
+    border-radius: 50%;
+  }
+  
+  .custom-header h1 {
+    margin: 0; /* 헤더의 마진을 제거합니다. */
+  }
+  
+  .custom-header span {
+    border: 2px solid red;
+    padding: 2px;
+    border-radius: 50%;
+    color: white;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 1.5);
+  }
+  
