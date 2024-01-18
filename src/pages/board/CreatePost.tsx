@@ -63,7 +63,7 @@ function CreatePost() {
       }
 
       const formData = new FormData();
-      formData.append('requestDto', new Blob([JSON.stringify(requestData)], {type: "application/json"}));
+      formData.append('requestDto', new Blob([JSON.stringify(requestData)], { type: "application/json" }));
 
       const response = fetch('http://localhost:8080/api/posts?gameType=PC_GAME&gameName=LEAGUE_OF_LEGEND&boardName=FREE_BOARD', {
         method: 'POST',
@@ -89,13 +89,13 @@ function CreatePost() {
   const handleSuccess = () => {
     console.log('게시글 작성 성공');
     alert('게시글 작성 성공');
-    // window.location.reload()
+    window.location.reload()
   };
 
   const handleFailure = () => {
     console.error('게시글 작성 실패');
     alert('게시글 작성 실패');
-    // window.location.reload()
+    window.location.reload()
   };
 
   const handleCancel = () => {
