@@ -1,24 +1,24 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BoardDto } from "../../dto/Board";
-import { Container, Row, Col, Table } from "react-bootstrap";
+import { Container, Row, Col, Table, Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "./Board.css"; // Import your custom CSS file
 
 const Board: React.FC = () => {
   const [board, setBoard] = useState<Array<BoardDto>>([]);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [selectedBoard, setSelectedBoard] = useState("FREE_BOARD");
 
   useEffect(() => {
     getBoard();
-  }, []);
+  }, [selectedBoard, currentPage]);
 
   const getBoard = async (page = 1) => {
     try {
       const res = await axios.get(
-        `http://51.21.48.160:8080/api/posts?type=PC_GAME&game=LEAGUE_OF_LEGEND&board=FREE_BOARD&page=${page}&size=10&sortKey=createdAt&isAsc=false`
+        `http://localhost:8080/api/posts?type=PC_GAME&game=LEAGUE_OF_LEGEND&board=${selectedBoard}&page=${page}&size=10&sortKey=createdAt&isAsc=false`
       );
       console.log(res);
       setBoard(res.data.data.content);
@@ -29,14 +29,19 @@ const Board: React.FC = () => {
     }
   };
 
-  // 페이지 변경
+  const changeBoard = (newBoard: string) => {
+    setSelectedBoard(newBoard);
+    getBoard();
+  };
+
+  // Page change
   const handlePageChange = (newPage: number) => {
     getBoard(newPage);
   };
 
   const renderPagination = () => {
     const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
-  
+
     return (
       <div className="pagination">
         {pages.map((page) => (
@@ -54,6 +59,21 @@ const Board: React.FC = () => {
 
   return (
     <Container>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h2>Board</h2>
+        <Dropdown>
+          <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+            {selectedBoard === "FREE_BOARD" ? "자유 게시판" : "팀원 찾기 게시판"}
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item onClick={() => changeBoard("FREE_BOARD")}>자유 게시판</Dropdown.Item>
+            <Dropdown.Item onClick={() => changeBoard("FIND_USER_BOARD")}>팀원 찾기 게시판</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+        <Link to="/write_post" className="btn btn-primary">
+          글 작성
+        </Link>
+      </div>
       <Table striped bordered hover responsive className="table">
         <thead>
           <tr>
@@ -80,7 +100,7 @@ const Board: React.FC = () => {
           ))}
         </tbody>
       </Table>
-      
+      {renderPagination()}
     </Container>
   );
 };

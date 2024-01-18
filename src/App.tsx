@@ -13,6 +13,8 @@ import Admin from './pages/admin/Admin';
 import ReportedPosts from './pages/admin/ReportedPosts';
 import MyPage from './pages/user/MyPage';
 import ProfileModify from './pages/user/ProfileModify';
+import CreatePost from './pages/board/CreatePost';
+import UpdatePost from './pages/board/UpdatePost';
 
 function App() {
     return (
@@ -23,6 +25,8 @@ function App() {
                 <Route path="/news" Component={News} />
                 <Route path="/pc/lol" Component={Board} />
                 <Route path="/api/posts/:postId" Component={Post} />
+                <Route path="/write_post" Component={CreatePost} />
+                <Route path="/modify_post" Component={UpdatePost} />
                 <Route path="/request" Component={Request} />
                 <Route path='/admin' Component={Admin} />
                 <Route path='/admin/reported_posts' Component={ReportedPosts} />
