@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { TeamDto } from '../../dto/Team';
 
-import './Team.css';
+import './Team.css'; // Import your custom CSS file
 
 const Team: React.FC = () => {
   const [teams, setTeams] = useState<TeamDto[] | null>(null);
@@ -12,7 +12,7 @@ const Team: React.FC = () => {
     getTeams(gameName);
   }, []);
 
-  const getTeams = async (gameName:string) => {
+  const getTeams = async (gameName: string) => {
     try {
       const res = await axios.get(`http://localhost:8080/api/teams?gameName=${gameName}`);
       setTeams(res.data.data);
@@ -23,14 +23,14 @@ const Team: React.FC = () => {
   };
 
   return (
-      <div>
+      <div className="team-container">
         <h1>Team List</h1>
         {teams ? (
             <ul>
               {teams.map((team) => (
-                  <li key={team.teamId}>
-                    <h2>{team.teamName}</h2>
-                    <p>{team.teamIntroduction}</p>
+                  <li key={team.teamId} className="team-item">
+                    <h2 className="team-name">{team.teamName}</h2>
+                    <p className="team-introduction">{team.teamIntroduction}</p>
                   </li>
               ))}
             </ul>
