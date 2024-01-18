@@ -44,7 +44,7 @@ const ProfileModify: React.FC = () => {
     };
 
     fetchUserData();
-    if( user !== null ){
+    if (user !== null) {
       setIntroduction(user.introduction)
       setProfileURL(user.profile_url)
     }
@@ -94,7 +94,7 @@ const ProfileModify: React.FC = () => {
       {user ? (
         <Card>
           <Card.Body>
-          <Row style={rowStyle}>
+            <Row style={rowStyle}>
               <Form.Group as={Col} controlId="formGridProfileImage">
                 <img
                   src={user.profile_url} // 사용자의 profile_url을 이미지 소스로 사용
@@ -116,7 +116,7 @@ const ProfileModify: React.FC = () => {
             <Row style={rowStyle}>
               <Form.Group as={Col} controlId="formGridNickname">
                 <Form.Label>Nickname</Form.Label>
-                <Form.Control type="text" placeholder={user.nickname} readOnly/>
+                <Form.Control type="text" placeholder={user.nickname} readOnly />
               </Form.Group>
               <Form.Group as={Col} controlId="formGridNowPassword">
                 <Form.Label>Now Password</Form.Label>
