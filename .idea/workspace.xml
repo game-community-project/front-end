@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="87105bf8-6e73-4f7d-b328-bbb38088f74f" name="Changes" comment="1">
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/team/Team.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/team/Team.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +47,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "feature/profile__modify",
+    "git-widget-placeholder": "feature/team",
     "last_opened_file_path": "/Users/kimminseong/Desktop/front-end/src/dto",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -76,7 +76,7 @@
       <updated>1705455449284</updated>
       <workItem from="1705455450720" duration="2020000" />
       <workItem from="1705495681914" duration="1250000" />
-      <workItem from="1705554782095" duration="10902000" />
+      <workItem from="1705554782095" duration="11195000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
