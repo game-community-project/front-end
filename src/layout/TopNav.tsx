@@ -37,6 +37,8 @@ function TopNav() {
 						<NavDropdown title="모바일게임" id="navbarScrollingDropdown">
 							<NavDropdown.Item href="/mobile/brawl_stars">브롤스타즈</NavDropdown.Item>
 						</NavDropdown>
+						<Nav.Link><NavLink to='/team_promotion'>팀 홍보 게시판</NavLink></Nav.Link>
+						<Nav.Link><NavLink to='/request'>요청 게시판</NavLink></Nav.Link>
 						<Nav.Link><NavLink to='/admin'>관리자</NavLink></Nav.Link>
 					</Nav>
 					<Form className="d-flex">

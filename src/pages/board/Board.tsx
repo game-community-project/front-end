@@ -3,47 +3,56 @@ import { useEffect, useState } from "react";
 import { BoardDto } from "../../dto/Board";
 import { Container, Table, Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import "./Board.css"; // 사용자 정의 CSS 파일을 가져옵니다.
+import "./Board.css";
 
 interface BoardProps {
   gameType: string;
   gameName: string;
 }
 
-const Board: React.FC<BoardProps> = ({gameType, gameName}) => {
+const Board: React.FC<BoardProps> = ({ gameType, gameName }) => {
   const [board, setBoard] = useState<Array<BoardDto>>([]);
   const [selectedBoard, setSelectedBoard] = useState("FREE_BOARD");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    getBoard();
-  }, [selectedBoard, currentPage]);
+    const fetchData = async () => {
+      try {
+        let adjustedSelectedBoard = selectedBoard;
 
-  const getBoard = async (page = 1) => {
-    try {
-      const res = await axios.get(
-        `http://localhost:8080/api/posts?type=${gameType}&game=${gameName}&board=${selectedBoard}&page=${page}&size=10&sortKey=createdAt&isAsc=false`
-      );
-      console.log(res);
-      console.log(res.data.data.content);
-      setBoard(res.data.data.content);
-      setTotalPages(res.data.data.totalPages);
-      setCurrentPage(page);
-    } catch (error) {
-      console.error("에러: ", error);
-    }
-  };
+        if (gameType === 'EMPTY_TYPE') {
+          // 현재 경로가 '/request'인지 확인
+          if (window.location.pathname === '/request') {
+            adjustedSelectedBoard = 'REQUEST_BOARD';
+          } else {
+            // 원하는 경우 다른 기본값으로 설정
+            adjustedSelectedBoard = 'GROUP_PROMOTION_BOARD';
+          }
+        }
+
+        const res = await axios.get(
+          `http://localhost:8080/api/posts?type=${gameType}&game=${gameName}&board=${adjustedSelectedBoard}&page=${currentPage}&size=10&sortKey=createdAt&isAsc=false`
+        );
+        console.log(res);
+        setBoard(res.data.data.content);
+        setTotalPages(res.data.data.totalPages);
+      } catch (error) {
+        console.error("에러: ", error);
+      }
+    };
+
+    fetchData(); // 초기 렌더링 시 한 번 호출
+  }, [selectedBoard, currentPage]);
 
   const changeBoard = (newBoard: string) => {
     setSelectedBoard(newBoard);
-    getBoard();
+    setCurrentPage(1); // 게시판 변경 시 현재 페이지를 1로 리셋
   };
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
-      getBoard(newPage);
     }
   };
 
