@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import S3 from 'react-s3';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { PostDto } from '../../dto/Post';
 
@@ -7,6 +8,13 @@ import likeImage from '../../images/like_image.png';
 import unlikeImage from '../../images/unlike_image.png';
 
 import './Post.css';
+
+const config = {
+    bucketName: process.env.REACT_APP_AWS_BUCKET_NAME,
+    region: process.env.REACT_APP_AWS_REGION,
+    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+}
 
 const Post: React.FC = () => {
     const navigate = useNavigate();
@@ -21,15 +29,30 @@ const Post: React.FC = () => {
 
     const getPost = async (id: string | undefined) => {
         try {
-            const res = await axios.get(`http://localhost:8080/api/posts/${postId}`);
-            setPost(res.data.data);
-            setLikeCount(res.data.data.postLike);
-            setUnlikeCount(res.data.data.postUnlike);
+          const res = await axios.get(`http://localhost:8080/api/posts/${postId}`);
+          const postData = res.data.data;
+      
+          if (postData.postImageUrl) {
+            const urlParts = postData.postImageUrl.split('/');
+            const objectKey = urlParts[urlParts.length - 1];
+      
+            // 이미지가 있다면 S3에서 이미지 URL 생성
+            const imageUrl = `https://${config.bucketName}.s3.amazonaws.com/${objectKey}`;
+            
+            setPost({
+              ...postData,
+              postImageUrl: imageUrl, // 이미지 URL 추가
+            });
+          } else {
+            setPost(postData);
+          }
+      
+          setLikeCount(postData.postLike);
+          setUnlikeCount(postData.postUnlike);
         } catch (error) {
-            console.error('에러:', error);
+          console.error('에러:', error);
         }
-    };
-
+      };
     // 좋아요(true) 또는 싫어요(false)
     const isLike = async (isLike: boolean) => {
         try {
