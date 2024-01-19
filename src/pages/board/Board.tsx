@@ -24,18 +24,20 @@ const Board: React.FC<BoardProps> = ({ gameType, gameName }) => {
         if (gameType === 'EMPTY_TYPE') {
           // 현재 경로가 '/request'인지 확인
           if (window.location.pathname === '/request') {
-            adjustedSelectedBoard = 'REQUEST_BOARD';
+            adjustedSelectedBoard = 'REQUIRED_BOARD';
           } else {
             // 원하는 경우 다른 기본값으로 설정
             adjustedSelectedBoard = 'GROUP_PROMOTION_BOARD';
           }
         }
+        console.log(adjustedSelectedBoard);
 
         const res = await axios.get(
           `http://localhost:8080/api/posts?type=${gameType}&game=${gameName}&board=${adjustedSelectedBoard}&page=${currentPage}&size=10&sortKey=createdAt&isAsc=false`
         );
         console.log(res);
         setBoard(res.data.data.content);
+        console.log(res.data.data.content);
         setTotalPages(res.data.data.totalPages);
       } catch (error) {
         console.error("에러: ", error);

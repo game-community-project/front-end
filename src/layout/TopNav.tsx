@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Nav, Container, Form, Navbar, NavDropdown } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 function TopNav() {
 	// 로그인 상태를 추적하기 위해 상태를 사용합니다.
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const navigate=useNavigate();
 
 	useEffect(() => {
 		// 페이지 로딩 시 로그인 상태 확인

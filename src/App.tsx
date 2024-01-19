@@ -25,8 +25,8 @@ function App() {
                 <Route path="/pc/val" element={<Board gameType="PC_GAME" gameName="VALORANT" />} />
                 <Route path="/console/zelda" element={<Board gameType="CONSOLE_GAME" gameName="THE_LEGEND_OF_ZELDA_TEARS_OF_THE_KINGDOM" />} />
                 <Route path="/mobile/brawl_stars" element={<Board gameType="MOBILE_GAME" gameName="BRAWL_STARS" />} />
-                <Route path="/request" element={<Board gameType="EMPTY_GAME" gameName="EMPTY_NAME" />} />
-                <Route path="/team_promotion" element={<Board gameType="EMPTY_GAME" gameName="EMPTY_NAME" />} />
+                <Route path="/request" element={<Board gameType="EMPTY_TYPE" gameName="EMPTY_NAME" />} />
+                <Route path="/team_promotion" element={<Board gameType="EMPTY_TYPE" gameName="EMPTY_NAME" />} />
                 <Route path="/:gameType/:gameName/:postId" Component={Post} />
                 <Route path="/write_post" Component={CreatePost} />
                 <Route path="/modify_post/:postId" Component={UpdatePost} />
