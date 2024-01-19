@@ -26,7 +26,7 @@ function Login() {
     const Confirm = async () => {
         try {
             console.log("formData: formData", formData);
-            const response = await fetch(`http://51.21.48.160:8080/api/users/login`, {
+            const response = await fetch(`http://localhost:8080/api/users/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
