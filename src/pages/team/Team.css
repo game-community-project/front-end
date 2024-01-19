@@ -1,0 +1,26 @@
+/* Team.css */
+
+.team-container {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.team-item {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.team-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.team-introduction {
+  font-size: 14px;
+  color: #666;
+}
