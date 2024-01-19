@@ -2,8 +2,8 @@ import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.module.css'
-import axios, { AxiosError, HttpStatusCode } from "axios";
-import { useEffect, useState } from "react";
+import axios from "axios";
+import { useState } from "react";
 import { UserDto } from "../../dto/UserDto";
 
 interface AdminProps { }
@@ -105,29 +105,30 @@ function FormUserInfo({ userData }: FormUserInfoProps) {
 				<Row className="mb-3">
 					<Form.Group as={Col} controlId="formGridEmail">
 						<Form.Label>Email</Form.Label>
-						<Form.Control type="email" placeholder="Enter email" />
+						<Form.Control type="email" placeholder="Email" value={userData.email}/>
 					</Form.Group>
 
 					<Form.Group as={Col} controlId="formGridNickname">
 						<Form.Label>Nickname</Form.Label>
-						<Form.Control type="text" placeholder="Nickname" defaultValue={userData.nickname} />
+						<Form.Control type="text" placeholder="Nickname" value={userData.nickname} />
 					</Form.Group>
 				</Row>
 
 				<Form.Group className="mb-3" controlId="formGridIntroduction">
 					<Form.Label>Introduction</Form.Label>
-					<Form.Control placeholder="Introduction" />
+					<Form.Control placeholder="Introduction" value={userData.introduction} />
 				</Form.Group>
 
 				<Row className="mb-3">
 					<Form.Group as={Col} controlId="formGridRanking">
 						<Form.Label>Ranking</Form.Label>
-						<Form.Control />
+						<Form.Control value={userData.ranking}/>
 					</Form.Group>
 
 					<Form.Group as={Col} controlId="formGridBlockDate">
 						<Form.Label>Block Date</Form.Label>
-						<DatePicker selected={new Date()} onChange={() => { }} />
+						<br/>
+						<DatePicker selected={new Date()} value={userData.block_date} onChange={() => { }} />
 					</Form.Group>
 				</Row>
 
