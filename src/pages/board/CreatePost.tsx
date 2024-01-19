@@ -65,7 +65,7 @@ function CreatePost() {
       const formData = new FormData();
       formData.append('requestDto', new Blob([JSON.stringify(requestData)], { type: "application/json" }));
 
-      const response = fetch('http://localhost:8080/api/posts?gameType=PC_GAME&gameName=LEAGUE_OF_LEGEND&boardName=FREE_BOARD', {
+      const response = fetch(`http://localhost:8080/api/posts?gameType=${gameType}&gameName=${gameName}&boardName=${boardName}`, {
         method: 'POST',
         body: formData,
         headers: {
@@ -73,9 +73,12 @@ function CreatePost() {
           'Access': `${accessToken}`,
           'Refresh': `${refreshToken}`,
         },
-      }).then(response => {
+      }).then(async response => {
         if (response.ok) {
-          handleSuccess();
+          const responseData = await response.json();
+          console.log(responseData);
+          const postId = responseData.data.postId;
+          handleSuccess(postId);
         } else {
           handleFailure();
         }
@@ -86,10 +89,10 @@ function CreatePost() {
     }
   };
 
-  const handleSuccess = () => {
+  const handleSuccess = (postId: number) => {
     console.log('게시글 작성 성공');
     alert('게시글 작성 성공');
-    window.location.reload()
+    navigate(`/api/posts/${postId}`);
   };
 
   const handleFailure = () => {
@@ -142,6 +145,7 @@ function CreatePost() {
             <option value="VALORANT">발로란트</option>
             <option value="THE_LEGEND_OF_ZELDA_TEARS_OF_THE_KINGDOM">젤다의 전설 티어스 오브 더 킹덤</option>
             <option value="BRAWL_STARS">브롤스타즈</option>
+            <option value="EMPTY_NAME">없음</option>
           </select>
         </div>
         <div>

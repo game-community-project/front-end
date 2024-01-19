@@ -73,7 +73,7 @@ const Post: React.FC = () => {
             };
 
             await axios.delete(`http://localhost:8080/api/posts/${postId}`, config);
-            navigate(-1);
+            navigate(`/pc/lol`);
             window.location.reload();
 
 
@@ -114,7 +114,7 @@ const Post: React.FC = () => {
                         <span className="post-stat">{post.postUnlike}</span>
                     </div>
                     <div className="edit-delete-buttons">
-                        <Link to="/modify_post" className="btn btn-primary">
+                        <Link to={`/modify_post/${postId}`} className="btn btn-primary">
                             수정
                         </Link>
                         <button className="btn btn-delete" onClick={deletePost}>
