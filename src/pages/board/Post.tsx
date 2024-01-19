@@ -20,10 +20,14 @@ const Post: React.FC = () => {
     }, [postId]);
 
     const getPost = async (id: string | undefined) => {
-        const res = await axios.get(`http://localhost:8080/api/posts/${postId}`);
-        setPost(res.data.data);
-        setLikeCount(res.data.data.postLike);
-        setUnlikeCount(res.data.data.postUnlike);
+        try {
+            const res = await axios.get(`http://localhost:8080/api/posts/${postId}`);
+            setPost(res.data.data);
+            setLikeCount(res.data.data.postLike);
+            setUnlikeCount(res.data.data.postUnlike);
+        } catch (error) {
+            console.error('에러:', error);
+        }
     };
 
     // 좋아요(true) 또는 싫어요(false)
@@ -94,6 +98,13 @@ const Post: React.FC = () => {
                         </p>
                         <hr />
                         <p>{post.postContent}</p>
+                        {post.postImageUrl && (
+                            <img
+                                src={post.postImageUrl}
+                                alt="게시물 이미지"
+                                className="post-image"
+                            />
+                        )}
                     </div>
                     <div className="post-actions">
                         <div className="like-dislike">
