@@ -122,7 +122,7 @@ const Board: React.FC<BoardProps> = ({ gameType, gameName }) => {
           <Col md={4}>
             <div>
               {/* Team 컴포넌트를 오른쪽에 표시 */}
-              <Team />
+              <Team gameName ={gameName} />
             </div>
           </Col>
         </Row>

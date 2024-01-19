@@ -1,10 +1,16 @@
+// Team.tsx
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { TeamDto } from '../../dto/Team';
 
-import './Team.css'; // Import your custom CSS file
+import './Team.css';
 
-const Team: React.FC = () => {
+interface TeamProps {
+  gameName: string; // 부모 컴포넌트에서 전달되는 게임 이름
+}
+
+const Team: React.FC<TeamProps> = ({ gameName }) => {
   const [teams, setTeams] = useState<TeamDto[] | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -13,15 +19,13 @@ const Team: React.FC = () => {
   const [userTeams, setUserTeams] = useState<TeamDto[] | null>(null);
 
   useEffect(() => {
-    // 유저가 로그인한 상태라면 유저가 속한 팀 리스트를 가져옴
     if (isLoggedIn()) {
       getUserTeams();
     } else {
       // 로그인하지 않은 경우 기본적으로 게임에 속한 팀 리스트를 가져옴
-      const gameName = "LEAGUE_OF_LEGEND"; // 예시로 하드코딩, 실제로는 동적으로 값을 받아오세요
       getTeams(gameName, currentPage);
     }
-  }, [currentPage]);
+  }, [currentPage, gameName]);
 
   const getTeams = async (gameName: string, page: number) => {
     try {
@@ -44,11 +48,8 @@ const Team: React.FC = () => {
   };
 
   const isLoggedIn = () => {
-    // 로컬 스토리지에서 토큰을 가져오거나, 다른 방법으로 로그인 상태를 확인
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
-
-    // 토큰이 존재하면 로그인 상태로 간주
     return !!accessToken && !!refreshToken;
   };
 
@@ -81,7 +82,6 @@ const Team: React.FC = () => {
       <div className="team-container">
         <h1>Team List</h1>
         {isLoggedIn() && userTeams ? (
-            // 유저가 로그인한 경우 유저가 속한 팀 리스트를 출력
             <div>
               <ul>
                 {userTeams.map((team) => (
@@ -104,7 +104,6 @@ const Team: React.FC = () => {
               </div>
             </div>
         ) : teams ? (
-            // 로그인하지 않은 경우 기본적으로 게임에 속한 팀 리스트를 출력
             <div>
               <ul>
                 {teams.map((team) => (
