@@ -1,51 +1,61 @@
+.post-id {
+  width: 3%;
+  text-align: center;
+}
+
 .title-column {
-    width: 45%;
-    text-align: center;
-  }
+  width: 40%;
+  text-align: center;
+}
 
-  .author-column {
-    width: 15%;
-    text-align: center;
-  }
+.author-column {
+  width: 15%;
+  text-align: center;
+}
 
-  .like-column {
-    width: 7%;
-    text-align: center;
-  }
+.like-column {
+  width: 7%;
+  text-align: center;
+}
 
-  .unlike-column {
-    width: 7%;
-    text-align: center;
-  }
-  
-  .table {
-    text-align: center;
-  }
-  
-  .table th,
-  .table td {
-    text-align: center;
-  }
+.unlike-column {
+  width: 7%;
+  text-align: center;
+}
 
-  .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  
-  .pagination span {
-    padding: 10px;
-    margin: 0 5px;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .pagination span.active {
-    background-color: #007bff;
-    color: #fff;
-  }
-  
-  .pagination span:hover {
-    background-color: #ddd;
-  }
+.createAt-column {
+  width: 300px;
+  text-align: center;
+}
+
+.table {
+  text-align: center;
+}
+
+.table th,
+.table td {
+  text-align: center;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination span {
+  padding: 10px;
+  margin: 0 5px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.pagination span.active {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.pagination span:hover {
+  background-color: #ddd;
+}

@@ -14,7 +14,7 @@ const MyPage: React.FC = () => {
     const fetchUserData = async () => {
       try {
         // 서버의 유저 정보 가져오기 엔드포인트 URL
-        const fetchUserUrl = 'http://localhost:8080/api/users/profile';
+        const fetchUserUrl = `http://localhost:8080/api/users/profile`;
 
         // 저장된 토큰 가져오기
         const accessToken = localStorage.getItem('accessToken');
