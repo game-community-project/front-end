@@ -115,7 +115,12 @@ const Board: React.FC<BoardProps> = ({ gameType, gameName }) => {
             <tr key={board.postId}>
               <td>{board.postId}</td>
               <td>
-                <Link to={`/${board.gameType}/${board.gameName}/${board.postId}`}>{board.postTitle}</Link>
+              <Link
+                  to={`/${board.gameType}/${board.gameName}/${board.postId}`}
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  {board.postTitle}
+                </Link>
               </td>
               <td>{board.postAuthor}</td>
               <td>{board.postLike}</td>
