@@ -1,8 +1,11 @@
+// Board.tsx
+
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { BoardDto } from "../../dto/Board";
-import { Container, Table, Dropdown } from "react-bootstrap";
+import { Container, Table, Dropdown, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Team from "../team/Team"; // Team 컴포넌트를 import합니다.
 import "./Board.css";
 
 interface BoardProps {
@@ -84,53 +87,63 @@ const Board: React.FC<BoardProps> = ({ gameType, gameName }) => {
 
   return (
     <Container>
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>게시판</h2>
-        <Dropdown>
-          <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-            {selectedBoard === "FREE_BOARD" ? "자유 게시판" : "팀원 찾기 게시판"}
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item onClick={() => changeBoard("FREE_BOARD")}>자유 게시판</Dropdown.Item>
-            <Dropdown.Item onClick={() => changeBoard("FIND_USER_BOARD")}>팀원 찾기 게시판</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-        <Link to="/write_post" className="btn btn-primary">
-          글 작성
-        </Link>
-      </div>
-      <Table striped bordered hover responsive className="table">
-        <thead>
-          <tr>
-            <th className="post-id">ID</th>
-            <th className="title-column">제목</th>
-            <th className="author-column">작성자</th>
-            <th className="like-column">좋아요</th>
-            <th className="unlike-column">싫어요</th>
-            <th className="createAt-column">작성일</th>
-          </tr>
-        </thead>
-        <tbody>
-          {board.map((board: BoardDto) => (
-            <tr key={board.postId}>
-              <td>{board.postId}</td>
-              <td>
-              <Link
-                  to={`/${board.gameType}/${board.gameName}/${board.postId}`}
-                  style={{ textDecoration: 'none', color: 'inherit' }}
-                >
-                  {board.postTitle}
-                </Link>
-              </td>
-              <td>{board.postAuthor}</td>
-              <td>{board.postLike}</td>
-              <td>{board.postUnlike}</td>
-              <td>{board.createdAt}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      {renderPagination()}
+      <Row>
+        <Col md={8}>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h2>게시판</h2>
+            <Dropdown>
+              <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                {selectedBoard === "FREE_BOARD" ? "자유 게시판" : "팀원 찾기 게시판"}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => changeBoard("FREE_BOARD")}>자유 게시판</Dropdown.Item>
+                <Dropdown.Item onClick={() => changeBoard("FIND_USER_BOARD")}>팀원 찾기 게시판</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+            <Link to="/write_post" className="btn btn-primary">
+              글 작성
+            </Link>
+          </div>
+          <Table striped bordered hover responsive className="table">
+            <thead>
+              <tr>
+                <th className="post-id">ID</th>
+                <th className="title-column">제목</th>
+                <th className="author-column">작성자</th>
+                <th className="like-column">좋아요</th>
+                <th className="unlike-column">싫어요</th>
+                <th className="createAt-column">작성일</th>
+              </tr>
+            </thead>
+            <tbody>
+              {board.map((board: BoardDto) => (
+                <tr key={board.postId}>
+                  <td>{board.postId}</td>
+                  <td>
+                    <Link
+                      to={`/${board.gameType}/${board.gameName}/${board.postId}`}
+                      style={{ textDecoration: 'none', color: 'inherit' }}
+                    >
+                      {board.postTitle}
+                    </Link>
+                  </td>
+                  <td>{board.postAuthor}</td>
+                  <td>{board.postLike}</td>
+                  <td>{board.postUnlike}</td>
+                  <td>{board.createdAt}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          {renderPagination()}
+        </Col>
+        <Col md={4}>
+          <div>
+            {/* Team 컴포넌트를 오른쪽에 표시 */}
+            <Team gameName={gameName} />
+          </div>
+        </Col>
+      </Row>
     </Container>
   );
 };
