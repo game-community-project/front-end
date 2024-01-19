@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { UserDto } from '../../dto/UserDto';
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { Alert, Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import { access } from 'fs';
 import { useNavigate } from 'react-router-dom';
 
@@ -168,3 +168,24 @@ const ProfileModify: React.FC = () => {
 };
 
 export default ProfileModify;
+
+function BasicExample() {
+  return (
+    <>
+      {[
+        'primary',
+        'secondary',
+        'success',
+        'danger',
+        'warning',
+        'info',
+        'light',
+        'dark',
+      ].map((variant) => (
+        <Alert key={variant} variant={variant}>
+          This is a {variant} alert—check it out!
+        </Alert>
+      ))}
+    </>
+  );
+}

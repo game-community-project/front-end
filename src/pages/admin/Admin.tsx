@@ -2,86 +2,68 @@ import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.module.css'
-import axios from "axios";
-import { useState } from "react";
+import axios, { AxiosError, HttpStatusCode } from "axios";
+import { useEffect, useState } from "react";
+import { UserDto } from "../../dto/UserDto";
 
-const headerHolder = {
-	access: '',
-	refresh: '',
+interface AdminProps { }
+
+interface FormFindUserProps {
+	onUserChange: (newUser: UserDto) => void;
 }
 
-function ButtonAdminLogin() {
-	const loginData = {
-		email: 'japgo@naver.com',
-		password: '1234',
-	}
-
-	const login = async () => {
-		try {
-			const loginUrl = 'http://localhost:8080/api/users/login';
-			const resp = await axios.post(loginUrl, loginData);
-			if (resp.status == 200) {
-				const access = resp.headers.access;
-				const refresh = resp.headers.refresh;
-
-				localStorage.setItem('access', access);
-				localStorage.setItem('refresh', refresh);
-				// headerHolder.access = access;
-				// headerHolder.refresh = refresh;
-			}
-			else {
-				alert("로그인 실패");
-			}
-		}
-		catch (error) {
-			console.error('exception : ', error);
-		}
-	}
-
-	return (
-		<div>
-			<Button onClick={login}>로그인</Button>
-		</div>
-	)
+interface FormUserInfoProps {
+	userData: UserDto;
 }
 
-function Admin() {
+function Admin(props: AdminProps) {
+	const [user, setUser] = useState<UserDto>();
+
+	const handlerUserChange = (newUser: UserDto) => {
+		setUser(newUser);
+	}
+
 	return (
 		<Container>
 			<br />
-			<ButtonAdminLogin />
-			<br />
 			<ButtonReportedPosts />
 			<br />
-			<FormFindUser />
+			<FormFindUser onUserChange={handlerUserChange} />
 			<br />
-			<FormUserInfo />
+			{ user && <FormUserInfo userData={user} /> }
 		</Container>
 	)
 }
 
-function FormFindUser() {
+function FormFindUser({ onUserChange }: FormFindUserProps) {
+
 	const [nickname, setNickname] = useState('');
 
-	const accessToken = localStorage.getItem('access');
-	const refreshToken = localStorage.getItem('refresh');
+	const accessToken = localStorage.getItem('accessToken');
+	const refreshToken = localStorage.getItem('refreshToken');
 
 	const find = async () => {
 		try {
-			const url = "http://localhost:8080/api/admin/users/" + nickname;
+			const url = `http://localhost:8080/api/admin/users/${nickname}`;
 			const resp = await axios.get(url, {
 				headers: {
 					access: accessToken,
 					refresh: refreshToken,
 				}
 			});
-
-			console.log( 'get user data : ', resp );
+			const userDto: UserDto = resp.data.data;
+			onUserChange(userDto);
 		}
 		catch (error) {
-			console.error( 'find user error : ', error);
+			if (axios.isAxiosError(error)) {
+				alert(error.response?.data?.message || '유저 조회에 실패하였습니다.');
+			} else {
+				console.error('find user error : ', error);
+				alert('유저 조회에 실패하였습니다.');
+			}
 		}
 	}
+
 
 	return (
 		<Container>
@@ -94,7 +76,7 @@ function FormFindUser() {
 						<Form.Control type="text" placeholder="Enter User Nickname" onChange={(e) => setNickname(e.target.value)} />
 					</Col>
 					<Col>
-						<Button variant="primary" type="submit" onClick={find}>Find</Button>
+						<Button variant="primary" type="button" onClick={find} >Find</Button>
 					</Col>
 				</Row>
 			</Form>
@@ -115,7 +97,8 @@ function ButtonReportedPosts() {
 	)
 }
 
-function FormUserInfo() {
+function FormUserInfo({ userData }: FormUserInfoProps) {
+
 	return (
 		<Container>
 			<Form>
@@ -127,7 +110,7 @@ function FormUserInfo() {
 
 					<Form.Group as={Col} controlId="formGridNickname">
 						<Form.Label>Nickname</Form.Label>
-						<Form.Control type="text" placeholder="Nickname" />
+						<Form.Control type="text" placeholder="Nickname" defaultValue={userData.nickname} />
 					</Form.Group>
 				</Row>
 
