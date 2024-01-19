@@ -17,8 +17,9 @@ const Board: React.FC = () => {
 
   const getBoard = async (page = 1) => {
     try {
+      const gameName :string ="LEAGUE_OF_LEGEND";
       const res = await axios.get(
-          `http://51.21.48.160:8080/api/posts?type=PC_GAME&game=LEAGUE_OF_LEGEND&board=FREE_BOARD&page=${page}&size=10&sortKey=createdAt&isAsc=false`
+          `http://51.21.48.160:8080/api/posts?type=PC_GAME&game=${gameName}&board=FREE_BOARD&page=${page}&size=10&sortKey=createdAt&isAsc=false`
       );
       console.log(res);
       setBoard(res.data.data.content);
