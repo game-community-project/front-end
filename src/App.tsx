@@ -31,7 +31,7 @@ function App() {
                 <Route path="/:gameType/:gameName/:postId" Component={Post} />
                 <Route path="/write_post" Component={CreatePost} />
                 <Route path="/modify_post/:postId" Component={UpdatePost} />
-                <Route path='/admin/:nickname' Component={UserInfo} />
+                <Route path='/admin/:param_nick' Component={UserInfo} />
                 <Route path='/admin/user_list' Component={UserList} />
                 <Route path='/admin/reported_posts' Component={ReportedPosts} />
                 <Route path='/*' element={'찾을 수 없는 페이지 입니다.'} />

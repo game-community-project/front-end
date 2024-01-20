@@ -3,22 +3,25 @@ import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.module.css'
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { UserDto } from "../../dto/UserDto";
 
 interface AdminProps { }
 
 interface FormFindUserProps {
 	onUserChange: (newUser: UserDto) => void;
+	nickname: string;
 }
 
 interface FormUserInfoProps {
 	userData: UserDto;
 }
 
+
 function UserInfo(props: AdminProps) {
 	const [user, setUser] = useState<UserDto>();
-	const { nickname } = useParams();
+	const { param_nick } = useParams();
+	const [nickname, setNickname] = useState(param_nick ? param_nick : '');
 	const accessToken = localStorage.getItem('accessToken');
 	const refreshToken = localStorage.getItem('refreshToken');
 
@@ -28,75 +31,69 @@ function UserInfo(props: AdminProps) {
 
 	useEffect(() => {
 		// 페이지가 처음 로드될 때 nickname이 있으면 해당 사용자 정보를 가져와서 설정
-		if (nickname) {
+		if (param_nick) {
+			setNickname(param_nick);
 			fetchData();
 		}
-	}, [nickname]);
+	}, [param_nick]);
 
-	const fetchData = async () => {
-		try {
-			const url = `http://localhost:8080/api/admin/users/${nickname}`;
-			const resp = await axios.get(url, {
-				headers: {
-					access: accessToken,
-					refresh: refreshToken,
-				}
-			});
-			const userDto: UserDto = resp.data.data;
-			handlerUserChange(userDto);
-		} catch (error) {
-			if (axios.isAxiosError(error)) {
-				alert(error.response?.data?.message || '유저 조회에 실패하였습니다.');
-			} else {
-				console.error('find user error : ', error);
-				alert('유저 조회에 실패하였습니다.');
-			}
-		}
-	}
+  const fetchData = async () => {
+    try {
+      const url = `http://localhost:8080/api/admin/users/${nickname}`;
+      const resp = await axios.get(url, {
+        headers: {
+          access: accessToken,
+          refresh: refreshToken,
+        }
+      });
+      const userDto: UserDto = resp.data.data;
+      // 부모 컴포넌트로 유저 정보 전달
+      handlerUserChange(userDto);
+    } catch (error) {
+    }
+  }
 
 	return (
 		<Container>
 			<br />
 			<ButtonReportedPosts />
 			<br />
-			<FormFindUser onUserChange={handlerUserChange} />
+			<FormFindUser nickname={nickname} onUserChange={handlerUserChange} />
 			<br />
-			{user && <FormUserInfo userData={user} />}
+			{user ? (<FormUserInfo userData={user} />) : (<p>해당 유저가 존재하지 않습니다.</p>) }
 		</Container>
 	)
 }
 
-function FormFindUser({ onUserChange }: FormFindUserProps) {
 
-	const [input_nickname, setNickname] = useState('');
-	const { nickname } = useParams();
 
+
+function FormFindUser({ onUserChange, nickname }: FormFindUserProps) {
 	const accessToken = localStorage.getItem('accessToken');
 	const refreshToken = localStorage.getItem('refreshToken');
+	const nicknameInputRef = useRef<HTMLInputElement | null>(null);
+
+	const [user, setUser] = useState<UserDto>();
+	const navigate = useNavigate();
 
 	const find = async () => {
-		try {
-			const url = `http://localhost:8080/api/admin/users/${input_nickname}`;
-			const resp = await axios.get(url, {
-				headers: {
-					access: accessToken,
-					refresh: refreshToken,
-				}
-			});
-			const userDto: UserDto = resp.data.data;
-			onUserChange(userDto);
-		}
-		catch (error) {
-			if (axios.isAxiosError(error)) {
-				alert(error.response?.data?.message || '유저 조회에 실패하였습니다.');
-			} else {
-				console.error('find user error : ', error);
-				alert('유저 조회에 실패하였습니다.');
-			}
-		}
+		navigate( `/admin/${nickname}` );
+		window.location.reload();
 	}
 
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		find();
+	  };
 
+	  useEffect(() => {
+		// Set focus when the component mounts
+		if (nicknameInputRef.current) {
+		  nicknameInputRef.current.focus();
+		}
+	  }, []); // Empty dependency array ensures this effect runs only once on mount
+	
+	
 	return (
 		<Container>
 			<Form>
@@ -105,10 +102,10 @@ function FormFindUser({ onUserChange }: FormFindUserProps) {
 						<Form.Label>User Nickname</Form.Label>
 					</Col>
 					<Col>
-						<Form.Control type="text" placeholder="Enter User Nickname" onChange={(e) => setNickname(e.target.value)} value={nickname} />
+						<Form.Control ref={nicknameInputRef} type="text" placeholder="Enter User Nickname" onChange={(e) => nickname=e.target.value} defaultValue={nickname} />
 					</Col>
 					<Col>
-						<Button variant="primary" type="button" onClick={find} >Find</Button>
+						<Button variant="primary" type="submit" onClick={find} >Find</Button>
 					</Col>
 				</Row>
 			</Form>
