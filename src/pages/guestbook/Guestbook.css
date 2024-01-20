@@ -1,0 +1,18 @@
+textarea {
+    width: 500px; 
+    height: 40px; 
+    resize: none;
+    float: left;
+    margin-left: 10px;
+  }
+
+  button {
+    height: 40px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+  }
+
+  .title {
+    margin-bottom: 20px;
+    margin-left: 10px;
+  }
