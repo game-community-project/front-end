@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { Form, FormControl, InputGroup, Col, Row, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -66,33 +67,6 @@ function Login() {
   const handleKakaoLogin = async () => {
     // Kakao OAuth 인증 페이지로 리다이렉트
     window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_API_KEY}&redirect_uri=${process.env.REACT_APP_API_BASE_URL}&response_type=code`;
-
-    // URL에서 코드 추출
-    const code = new URL(window.location.href).searchParams.get('code');
-    console.log(code);
-    
-    // 코드가 존재하면 서버로 전송
-    if (code) {
-      try {
-        const response = await fetch(`http://localhost:8080/api/users/kakao/callback?code=${code}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            // 필요에 따라 인증 토큰 등의 헤더를 추가할 수 있습니다.
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const responseData = await response.json();
-        console.log(responseData); // 서버에서 받은 응답 처리
-        navigate('/');
-      } catch (error) {
-        console.error(error); // 오류 처리
-      }
-    }
   };
 
   return (
