@@ -8,6 +8,7 @@ import likeImage from '../../images/like_image.png';
 import unlikeImage from '../../images/unlike_image.png';
 
 import './Post.css';
+import { Button, Form } from 'react-bootstrap';
 
 const config = {
     bucketName: process.env.REACT_APP_AWS_BUCKET_NAME,
@@ -16,12 +17,18 @@ const config = {
     secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
 }
 
+interface commentProps {
+    onCommentCancel: () => void;
+    onCommentComplete: () => void;
+}
+
 const Post: React.FC = () => {
     const navigate = useNavigate();
     const { postId } = useParams();
     const [post, setPost] = useState<PostDto | null>(null);
     const [likeCount, setLikeCount] = useState<number>(0);
     const [unlikeCount, setUnlikeCount] = useState<number>(0);
+    const [isWriteComment, setIsWriteComment] = useState(false);
 
     useEffect(() => {
         getPost(postId);
@@ -29,30 +36,30 @@ const Post: React.FC = () => {
 
     const getPost = async (id: string | undefined) => {
         try {
-          const res = await axios.get(`http://localhost:8080/api/posts/${postId}`);
-          const postData = res.data.data;
-      
-          if (postData.postImageUrl) {
-            const urlParts = postData.postImageUrl.split('/');
-            const objectKey = urlParts[urlParts.length - 1];
-      
-            // 이미지가 있다면 S3에서 이미지 URL 생성
-            const imageUrl = `https://${config.bucketName}.s3.amazonaws.com/${objectKey}`;
-            
-            setPost({
-              ...postData,
-              postImageUrl: imageUrl, // 이미지 URL 추가
-            });
-          } else {
-            setPost(postData);
-          }
-      
-          setLikeCount(postData.postLike);
-          setUnlikeCount(postData.postUnlike);
+            const res = await axios.get(`http://localhost:8080/api/posts/${postId}`);
+            const postData = res.data.data;
+
+            if (postData.postImageUrl) {
+                const urlParts = postData.postImageUrl.split('/');
+                const objectKey = urlParts[urlParts.length - 1];
+
+                // 이미지가 있다면 S3에서 이미지 URL 생성
+                const imageUrl = `https://${config.bucketName}.s3.amazonaws.com/${objectKey}`;
+
+                setPost({
+                    ...postData,
+                    postImageUrl: imageUrl, // 이미지 URL 추가
+                });
+            } else {
+                setPost(postData);
+            }
+
+            setLikeCount(postData.postLike);
+            setUnlikeCount(postData.postUnlike);
         } catch (error) {
-          console.error('에러:', error);
+            console.error('에러:', error);
         }
-      };
+    };
     // 좋아요(true) 또는 싫어요(false)
     const isLike = async (isLike: boolean) => {
         try {
@@ -109,6 +116,14 @@ const Post: React.FC = () => {
         }
     };
 
+
+    const handleWriteCommentView = () => {
+        setIsWriteComment(true);
+    }
+    const handleWriteCommentHide = () => {
+        setIsWriteComment(false);
+    }
+
     return (
         <>
             {post && (
@@ -155,11 +170,31 @@ const Post: React.FC = () => {
                             삭제
                         </button>
                     </div>
+                    <Button variant='outline-primary' onClick={handleWriteCommentView}>댓글 작성</Button>
                 </div>
             )
             }
+                {isWriteComment && (<CommentView onCommentCancel={handleWriteCommentHide} onCommentComplete={saveComment}/>)}
         </>
     );
 };
 
 export default Post;
+
+function CommentView({ onCommentCancel: onCommentCancel, onCommentComplete: onCommentComplete }: commentProps) {
+    const [comment, setComment] = useState('');
+
+    return (
+        <div className='post-container'>
+            <Button variant='outline-primary' onClick={onCommentComplete} >작성 완료</Button>{' '}
+            <Button variant='outline-warning' onClick={onCommentCancel} >작성 취소</Button>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                <Form.Control placeholder='댓글을 작성해 주세요.' as="textarea" rows={3} onChange={e=>setComment(e.target.value)} />
+            </Form.Group>
+        </div>
+    )
+}
+
+function saveComment() {
+    alert('댓글!')
+}
