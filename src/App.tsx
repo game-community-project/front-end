@@ -14,6 +14,9 @@ import ProfileModify from './pages/user/ProfileModify';
 import CreatePost from './pages/board/CreatePost';
 import UpdatePost from './pages/board/UpdatePost';
 import Logout from './pages/Logout';
+import CreateTeam from "./pages/team/CreateTeam";
+import TeamPage from "./pages/team/TeamPage";
+import AddUserToTeam from "./pages/team/AddUserToTeam";
 
 function App() {
     return (
@@ -29,6 +32,9 @@ function App() {
                 <Route path="/team_promotion" element={<Board gameType="EMPTY_TYPE" gameName="EMPTY_NAME" />} />
                 <Route path="/:gameType/:gameName/:postId" Component={Post} />
                 <Route path="/write_post" Component={CreatePost} />
+                <Route path="/create_team" Component={CreateTeam} />
+                <Route path="/teams/:teamId" Component={TeamPage} />
+                <Route path="/teams/:teamId/add_user" Component={AddUserToTeam} />
                 <Route path="/modify_post/:postId" Component={UpdatePost} />
                 <Route path='/admin' Component={Admin} />
                 <Route path='/admin/reported_posts' Component={ReportedPosts} />

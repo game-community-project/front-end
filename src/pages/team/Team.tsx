@@ -1,14 +1,12 @@
-// Team.tsx
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { TeamDto } from '../../dto/Team';
+import { Link, useNavigate } from 'react-router-dom';
 
 import './Team.css';
-import {useNavigate} from "react-router-dom";
 
 interface TeamProps {
-  gameName: string; // 부모 컴포넌트에서 전달되는 게임 이름
+  gameName: string;
 }
 
 const Team: React.FC<TeamProps> = ({ gameName }) => {
@@ -24,7 +22,6 @@ const Team: React.FC<TeamProps> = ({ gameName }) => {
     if (isLoggedIn()) {
       getUserTeams(gameName, currentPage);
     } else {
-      // 로그인하지 않은 경우 기본적으로 게임에 속한 팀 리스트를 가져옴
       getTeams(gameName, currentPage);
     }
   }, [currentPage, gameName]);
@@ -42,10 +39,9 @@ const Team: React.FC<TeamProps> = ({ gameName }) => {
   const getUserTeams = async (gameName: string, page: number) => {
     try {
       const accessToken = localStorage.getItem('accessToken');
-      console.log(accessToken);
       if (!accessToken) {
         console.error('액세스 토큰이 없습니다.');
-        alert('로그인하고 이용해주세요')
+        alert('로그인하고 이용해주세요');
         navigate("/");
         return;
       }
@@ -87,34 +83,71 @@ const Team: React.FC<TeamProps> = ({ gameName }) => {
 
   const createNewTeam = async () => {
     try {
-      // 팀 생성 API 호출
-      // ...
+      const res = await axios.post('http://localhost:8080/api/teams', {
+        teamName: newTeamName,
+      });
 
-      // 모달 닫기
       closeModal();
+
+      navigate(`/team/${res.data.data.teamId}`);
     } catch (error) {
       console.error('Error creating new team:', error);
     }
   };
 
+  const deleteTeam = async (teamId: number) => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        console.error('액세스 토큰이 없습니다.');
+        alert('로그인하고 이용해주세요');
+        navigate('/');
+        return;
+      }
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access': `${accessToken}`,
+        },
+      };
+
+      const res = await axios.delete(`http://localhost:8080/api/teams/${teamId}`, config);
+
+      if (res.status === 200) {
+        alert('팀이 성공적으로 삭제되었습니다.');
+      } else {
+        console.error('팀 삭제에 실패했습니다.');
+      }
+      window.location.reload();
+    } catch (error) {
+      console.error('에러:', error);
+    }
+  };
+
   return (
-      <div className="team-container">
-        <h1>Team List</h1>
+      <div className="container mt-4">
+        <h1 className="mb-4">Team List</h1>
+
         {isLoggedIn() && userTeams ? (
             <div>
-              <ul>
+              <ul className="list-group">
                 {userTeams.map((team) => (
-                    <li key={team.teamId} className="team-item">
-                      <h2 className="team-name">{team.teamName}</h2>
+                    <li key={team.teamId} className="list-group-item">
+                      <Link to={`/teams/${team.teamId}`} className="team-link">
+                        <h2 className="team-name">{team.teamName}</h2>
+                      </Link>
                       <p className="team-introduction">{team.teamIntroduction}</p>
+                      <button className="btn btn-danger" onClick={() => deleteTeam(team.teamId)}>팀 삭제</button>
                     </li>
                 ))}
               </ul>
-              <div className="pagination">
+
+              <div className="pagination mt-3">
                 {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
                     <span
                         key={page}
-                        className={page === currentPage ? "active" : ""}
+                        className={`page-item ${page === currentPage ? "active" : ""}`}
                         onClick={() => handlePageChange(page)}
                     >
                 {page}
@@ -124,19 +157,23 @@ const Team: React.FC<TeamProps> = ({ gameName }) => {
             </div>
         ) : teams ? (
             <div>
-              <ul>
+              <ul className="list-group">
                 {teams.map((team) => (
-                    <li key={team.teamId} className="team-item">
-                      <h2 className="team-name">{team.teamName}</h2>
+                    <li key={team.teamId} className="list-group-item">
+                      <Link to={`/teams/${team.teamId}`} className="team-link">
+                        <h2 className="team-name">{team.teamName}</h2>
+                      </Link>
                       <p className="team-introduction">{team.teamIntroduction}</p>
+                      <button className="btn btn-danger" onClick={() => deleteTeam(team.teamId)}>팀 삭제</button>
                     </li>
                 ))}
               </ul>
-              <div className="pagination">
+
+              <div className="pagination mt-3">
                 {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
                     <span
                         key={page}
-                        className={page === currentPage ? "active" : ""}
+                        className={`page-item ${page === currentPage ? "active" : ""}`}
                         onClick={() => handlePageChange(page)}
                     >
                 {page}
@@ -149,30 +186,32 @@ const Team: React.FC<TeamProps> = ({ gameName }) => {
         )}
 
         {isModalOpen && (
-            <div className="modal">
-              <div className="modal-content">
-            <span className="close" onClick={closeModal}>
-              &times;
-            </span>
-                <h2>Create New Team</h2>
-                <label>
-                  Team Name:
-                  <input
-                      type="text"
-                      value={newTeamName}
-                      onChange={(e) => setNewTeamName(e.target.value)}
-                  />
-                </label>
-                <button onClick={createNewTeam}>Create</button>
+            <div className="modal fade show" style={{ display: 'block' }} tabIndex={-1} role="dialog">
+              <div className="modal-dialog">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h2 className="modal-title">Create New Team</h2>
+                    <button type="button" className="btn-close" onClick={closeModal}></button>
+                  </div>
+                  <div className="modal-body">
+                    <label className="form-label">
+                      Team Name:
+                      <input
+                          type="text"
+                          className="form-control"
+                          value={newTeamName}
+                          onChange={(e) => setNewTeamName(e.target.value)}
+                      />
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
         )}
 
-        {isLoggedIn() && (
-            <button className="create-team-button" onClick={openModal}>
-              Create New Team
-            </button>
-        )}
+        <Link to="/create_team" className="btn btn-primary mt-3">
+          팀 생성
+        </Link>
       </div>
   );
 };
