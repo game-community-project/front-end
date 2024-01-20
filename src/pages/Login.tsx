@@ -50,6 +50,7 @@ function Login() {
                 console.log('로그인 성공');
         
                 navigate("/");
+                window.location.reload();
             } else {
                 console.error('로그인 실패');
                 alert('로그인 실패, 다시 시도해주세요.');
