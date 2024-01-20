@@ -35,8 +35,8 @@ const Guestbook: React.FC = () => {
 
   useEffect(() => {
     if (userId  && isLoggedIn()) {
-      getComments(userId , page);
       createComment();
+      getComments(userId , page);
     } else {
       console.error('로그인한 유저만 작성이 가능합니다.', error);
     }
@@ -63,26 +63,24 @@ const Guestbook: React.FC = () => {
     }
   }
 
-  const createComment = async () => {
-    try {
-      if (!isLoggedIn()) {
-        setError('로그인이 필요합니다.'); // 로그인이 안 된 경우 에러 처리
-        return;
-      }
-      const response = await axios.post(`http://localhost:8080/api/users/${userId}/guestbooks`, { content: newComment });
-      setComments([...comments, response.data]);
-      setNewComment('');
-    } catch (error) {
-      console.error('error:', error);
+const createComment = async () => {
+  try {
+    if (!isLoggedIn() || !userId) {
+      setError('로그인이 필요합니다.'); // 로그인이 안 된 경우 에러 처리
+      return;
     }
-  };
+    const response = await axios.post(`http://localhost:8080/api/users/${userId}/guestbooks`, { content: newComment });
+    setComments([...comments, response.data]);
+    setNewComment('');
+
+    //
+  } catch (error) {
+    console.error('error:', error);
+  }
+};
 
   const modifyComment = async (guestbookId: number, updateContent: string) => {
     try {
-      if (!isLoggedIn()) {
-        setError('로그인이 필요합니다.'); // 로그인이 안 된 경우 에러 처리
-        return;
-      }
       const response = await axios.patch(`http://localhost:8080/api/users/${userId}/guestbooks/${guestbookId}`, { content: updateContent });
       setComments((prevComments) =>
         prevComments.map((guestbook) =>
@@ -96,10 +94,6 @@ const Guestbook: React.FC = () => {
   
   const deleteComment = async (guestbookId: number) => {
     try {
-      if (!isLoggedIn()) {
-        setError('로그인이 필요합니다.'); // 로그인이 안 된 경우 에러 처리
-        return;
-      }
       await axios.delete(`http://localhost:8080/api/users/${userId}/guestbooks/${guestbookId}`);
       setComments((prevGuestbooks) => prevGuestbooks.filter((guestbook) => guestbook.id !== guestbookId));
     } catch (error) {
