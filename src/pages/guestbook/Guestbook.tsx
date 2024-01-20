@@ -3,38 +3,65 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { GuestBookDto } from '../../dto/UserDto';
+import { useParams } from 'react-router-dom';
 import './Guestbook.css';
 
-interface GuestbookProps {
-  userId: number;
-  isLoggedIn: boolean; // 로그인 여부를 받아오는 prop 추가
-}
-
-const Guestbook: React.FC<GuestbookProps> = ({ userId, isLoggedIn }) => {
+const Guestbook: React.FC = () => {
   const [comments, setComments] = useState<GuestBookDto[]>([]);
   const [newComment, setNewComment] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    fetchComments();
-  }, [page, userId]);
+  const { userId } = useParams();
 
-const fetchComments = async () => {
-  try {
-    const response = await axios.get(`http://localhost:8080/api/users/${userId}/guestbooks?page=${page}&size=10&sortBy=createdAt&isAsc=true`);
-    if (response.data && Array.isArray(response.data.data)) {
-      setComments(response.data.data);
-      setTotalPages(response.data.totalPages);
-    } else {
-      // 오류 처리
-      console.error('데이터 형식이 이상합니다', response.data);
+  //유저 검증 
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/users/${userId}`);
+        setComments(response.data.guestBookList);
+      } catch (error) {
+        console.error('사용자 정보를 가져오는 데 실패했습니다.', error);
+      }
+    };
+
+    // userId 존재하면 사용자 정보를 가져옴
+    if (userId) {
+      getUserData();
     }
-  } catch (error) {
-    console.error('error:', error);
+  }, [userId]);
+
+
+  useEffect(() => {
+    if (userId  && isLoggedIn()) {
+      getComments(userId , page);
+      createComment();
+    } else {
+      console.error('로그인한 유저만 작성이 가능합니다.', error);
+    }
+  }, [page, userId ]);
+
+  const isLoggedIn = () => {
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+    return !!accessToken && !!refreshToken;
+  };
+
+  const getComments = async (userId: string, page: number) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/users/${userId}/guestbooks?page=${page}&size=10&sortBy=createdAt&isAsc=true`);
+      if (response.data && Array.isArray(response.data.data)) {
+        setComments(response.data.data);
+        setTotalPages(response.data.totalPages);
+      } else {
+        // 오류 처리
+        console.error('데이터 형식이 이상합니다', response.data);
+      }
+    } catch (error) {
+      console.error('error:', error);
+    }
   }
-}
 
   const createComment = async () => {
     try {
@@ -74,7 +101,7 @@ const fetchComments = async () => {
 
   return (
     <div>
-        {error && <div className="error">{error}</div>}
+      {error && <div className="error">{error}</div>}
       <div className="title">
         <h4>🔅방명록🔅</h4>
       </div>
@@ -94,9 +121,9 @@ const fetchComments = async () => {
             const updatedContent = prompt('수정할 내용을 입력하세요.', comment.content) || '';
             modifyComment(comment.id, updatedContent);
           }}>
-            Edit
+            수정
           </button>
-          <button onClick={() => deleteComment(comment.id)}>Delete</button>
+          <button onClick={() => deleteComment(comment.id)}>삭제</button>
         </div>
       ))}
 
