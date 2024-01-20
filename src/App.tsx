@@ -14,6 +14,7 @@ import ProfileModify from './pages/user/ProfileModify';
 import CreatePost from './pages/board/CreatePost';
 import UpdatePost from './pages/board/UpdatePost';
 import Logout from './pages/Logout';
+import Guestbook from './pages/guestbook/Guestbook';
 
 function App() {
     return (
@@ -38,6 +39,7 @@ function App() {
                 <Route path='/logout' Component={Logout} />
                 <Route path='/my_page' Component={MyPage} />
                 <Route path='/profile_modify' Component={ProfileModify} />
+                <Route path='/guestbooks/:userId' Component={Guestbook} /> 
             </Routes>
         </BrowserRouter>
     );
