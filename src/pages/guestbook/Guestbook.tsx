@@ -65,7 +65,7 @@ const Guestbook: React.FC = () => {
 
   const createComment = async () => {
     try {
-      if (!isLoggedIn) {
+      if (!isLoggedIn()) {
         setError('로그인이 필요합니다.'); // 로그인이 안 된 경우 에러 처리
         return;
       }
@@ -79,6 +79,10 @@ const Guestbook: React.FC = () => {
 
   const modifyComment = async (guestbookId: number, updateContent: string) => {
     try {
+      if (!isLoggedIn()) {
+        setError('로그인이 필요합니다.'); // 로그인이 안 된 경우 에러 처리
+        return;
+      }
       const response = await axios.patch(`http://localhost:8080/api/users/${userId}/guestbooks/${guestbookId}`, { content: updateContent });
       setComments((prevComments) =>
         prevComments.map((guestbook) =>
@@ -89,9 +93,13 @@ const Guestbook: React.FC = () => {
       console.error('error:', error);
     }
   };
-
+  
   const deleteComment = async (guestbookId: number) => {
     try {
+      if (!isLoggedIn()) {
+        setError('로그인이 필요합니다.'); // 로그인이 안 된 경우 에러 처리
+        return;
+      }
       await axios.delete(`http://localhost:8080/api/users/${userId}/guestbooks/${guestbookId}`);
       setComments((prevGuestbooks) => prevGuestbooks.filter((guestbook) => guestbook.id !== guestbookId));
     } catch (error) {
