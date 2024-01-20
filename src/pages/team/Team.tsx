@@ -5,12 +5,14 @@ import axios from 'axios';
 import { TeamDto } from '../../dto/Team';
 
 import './Team.css';
+import {useNavigate} from "react-router-dom";
 
 interface TeamProps {
   gameName: string; // 부모 컴포넌트에서 전달되는 게임 이름
 }
 
 const Team: React.FC<TeamProps> = ({ gameName }) => {
+  const navigate = useNavigate();
   const [teams, setTeams] = useState<TeamDto[] | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -20,7 +22,7 @@ const Team: React.FC<TeamProps> = ({ gameName }) => {
 
   useEffect(() => {
     if (isLoggedIn()) {
-      getUserTeams();
+      getUserTeams(gameName, currentPage);
     } else {
       // 로그인하지 않은 경우 기본적으로 게임에 속한 팀 리스트를 가져옴
       getTeams(gameName, currentPage);
@@ -37,13 +39,30 @@ const Team: React.FC<TeamProps> = ({ gameName }) => {
     }
   };
 
-  const getUserTeams = async () => {
+  const getUserTeams = async (gameName: string, page: number) => {
     try {
-      const res = await axios.get(`http://localhost:8080/api/teams/users?page=${currentPage}&size=10&sortBy=teamName&isAsc=true`);
+      const accessToken = localStorage.getItem('accessToken');
+      console.log(accessToken);
+      if (!accessToken) {
+        console.error('액세스 토큰이 없습니다.');
+        alert('로그인하고 이용해주세요')
+        navigate("/");
+        return;
+      }
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access': `${accessToken}`,
+        },
+      };
+
+      const res = await axios.get(`http://localhost:8080/api/teams/users?page=${page}&size=10&sortBy=Team&isAsc=true&gameName=${gameName}`, config);
       setUserTeams(res.data.data.content);
       setTotalPages(res.data.data.totalPages);
+
     } catch (error) {
-      console.error('Error fetching user teams:', error);
+      console.error('에러:', error);
     }
   };
 
