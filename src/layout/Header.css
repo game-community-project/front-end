@@ -1,8 +1,9 @@
 .custom-header {
-    display: inline-block;
-    padding: 15px;
-    background-color: red;
-    border-radius: 50%;
+  display: inline-block;
+  padding: 23px;
+  background-color: red;
+  border-radius: 48%;
+  box-shadow: 2px 4px 8px rgba(0, 0, 1, 1);
   }
   
   .custom-header h1 {
