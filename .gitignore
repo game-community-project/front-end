@@ -22,3 +22,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+yarn.lock
+front-end.iml
+.idea/workspace.xml
+.idea/vcs.xml
+.idea/modules.xml
+yarn.lock
