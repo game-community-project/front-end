@@ -1,9 +1,9 @@
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.module.css'
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UserDto } from "../../dto/UserDto";
 
 interface AdminProps { }
@@ -16,11 +16,42 @@ interface FormUserInfoProps {
 	userData: UserDto;
 }
 
-function Admin(props: AdminProps) {
+function UserInfo(props: AdminProps) {
 	const [user, setUser] = useState<UserDto>();
+	const { nickname } = useParams();
+	const accessToken = localStorage.getItem('accessToken');
+	const refreshToken = localStorage.getItem('refreshToken');
 
 	const handlerUserChange = (newUser: UserDto) => {
 		setUser(newUser);
+	}
+
+	useEffect(() => {
+		// 페이지가 처음 로드될 때 nickname이 있으면 해당 사용자 정보를 가져와서 설정
+		if (nickname) {
+			fetchData();
+		}
+	}, [nickname]);
+
+	const fetchData = async () => {
+		try {
+			const url = `http://localhost:8080/api/admin/users/${nickname}`;
+			const resp = await axios.get(url, {
+				headers: {
+					access: accessToken,
+					refresh: refreshToken,
+				}
+			});
+			const userDto: UserDto = resp.data.data;
+			handlerUserChange(userDto);
+		} catch (error) {
+			if (axios.isAxiosError(error)) {
+				alert(error.response?.data?.message || '유저 조회에 실패하였습니다.');
+			} else {
+				console.error('find user error : ', error);
+				alert('유저 조회에 실패하였습니다.');
+			}
+		}
 	}
 
 	return (
@@ -30,21 +61,22 @@ function Admin(props: AdminProps) {
 			<br />
 			<FormFindUser onUserChange={handlerUserChange} />
 			<br />
-			{ user && <FormUserInfo userData={user} /> }
+			{user && <FormUserInfo userData={user} />}
 		</Container>
 	)
 }
 
 function FormFindUser({ onUserChange }: FormFindUserProps) {
 
-	const [nickname, setNickname] = useState('');
+	const [input_nickname, setNickname] = useState('');
+	const { nickname } = useParams();
 
 	const accessToken = localStorage.getItem('accessToken');
 	const refreshToken = localStorage.getItem('refreshToken');
 
 	const find = async () => {
 		try {
-			const url = `http://localhost:8080/api/admin/users/${nickname}`;
+			const url = `http://localhost:8080/api/admin/users/${input_nickname}`;
 			const resp = await axios.get(url, {
 				headers: {
 					access: accessToken,
@@ -73,7 +105,7 @@ function FormFindUser({ onUserChange }: FormFindUserProps) {
 						<Form.Label>User Nickname</Form.Label>
 					</Col>
 					<Col>
-						<Form.Control type="text" placeholder="Enter User Nickname" onChange={(e) => setNickname(e.target.value)} />
+						<Form.Control type="text" placeholder="Enter User Nickname" onChange={(e) => setNickname(e.target.value)} value={nickname} />
 					</Col>
 					<Col>
 						<Button variant="primary" type="button" onClick={find} >Find</Button>
@@ -105,7 +137,7 @@ function FormUserInfo({ userData }: FormUserInfoProps) {
 				<Row className="mb-3">
 					<Form.Group as={Col} controlId="formGridEmail">
 						<Form.Label>Email</Form.Label>
-						<Form.Control type="email" placeholder="Email" value={userData.email}/>
+						<Form.Control type="email" placeholder="Email" value={userData.email} />
 					</Form.Group>
 
 					<Form.Group as={Col} controlId="formGridNickname">
@@ -122,12 +154,12 @@ function FormUserInfo({ userData }: FormUserInfoProps) {
 				<Row className="mb-3">
 					<Form.Group as={Col} controlId="formGridRanking">
 						<Form.Label>Ranking</Form.Label>
-						<Form.Control value={userData.ranking}/>
+						<Form.Control value={userData.ranking} />
 					</Form.Group>
 
 					<Form.Group as={Col} controlId="formGridBlockDate">
 						<Form.Label>Block Date</Form.Label>
-						<br/>
+						<br />
 						<DatePicker selected={new Date()} value={userData.block_date} onChange={() => { }} />
 					</Form.Group>
 				</Row>
@@ -140,4 +172,4 @@ function FormUserInfo({ userData }: FormUserInfoProps) {
 	);
 }
 
-export default Admin;
+export default UserInfo;

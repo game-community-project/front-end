@@ -71,7 +71,7 @@ function TopNav() {
 						</NavDropdown>
 						<Nav.Link><NavLink to='/team_promotion' style={{ textDecoration: 'none', color: 'inherit' }}>팀 홍보 게시판</NavLink></Nav.Link>
 						<Nav.Link><NavLink to='/request' style={{ textDecoration: 'none', color: 'inherit' }}>요청 게시판</NavLink></Nav.Link>
-						{ isAdmin && <Nav.Link><NavLink to='/admin' style={{ textDecoration: 'none', color: 'inherit' }}>관리자</NavLink></Nav.Link> }
+						{ isAdmin && <Nav.Link><NavLink to='/admin/user_list' style={{ textDecoration: 'none', color: 'inherit' }}>관리자</NavLink></Nav.Link> }
 					</Nav>
 					<Form className="d-flex">
 						{/* 로그인 상태에 따라 링크를 조건부로 렌더링합니다. */}
