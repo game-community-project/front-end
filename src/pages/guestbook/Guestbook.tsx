@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { GuestBookDto } from '../../dto/UserDto';
 import './Guestbook.css';
+
 interface GuestbookProps {
     toUserId: number;
   }
