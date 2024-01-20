@@ -16,6 +16,7 @@ function CreatePost() {
   const [boardName, setBoardName] = useState('');
   const [postTitle, setPostTitle] = useState('');
   const [postContent, setPostContent] = useState('');
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const handleGameTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setGameType(e.target.value);
@@ -43,6 +44,11 @@ function CreatePost() {
     }
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    setSelectedImage(file || null);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
@@ -64,6 +70,9 @@ function CreatePost() {
 
       const formData = new FormData();
       formData.append('requestDto', new Blob([JSON.stringify(requestData)], { type: "application/json" }));
+      if (selectedImage) {
+        formData.append('file', selectedImage);
+      }
 
       const response = fetch(`http://localhost:8080/api/posts?gameType=${gameType}&gameName=${gameName}&boardName=${boardName}`, {
         method: 'POST',
@@ -171,24 +180,35 @@ function CreatePost() {
 
       <div className="container mt-5">
         {/* 중복된 폼 제거 */}
-        <div className="mb-3">
-          <label htmlFor="postTitle" className="form-label">
+        <div className="mb-3 d-flex flex-column align-items-start">
+          <label htmlFor="postTitle" className="form-label mb-2">
             제목
           </label>
           <input
             type="text"
-            className="form-control"
+            className="form-control mb-3"
             id="postTitle"
             onChange={(e) => setPostTitle(e.target.value)}
             placeholder="제목을 입력해주세요"
           />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="postContent" className="form-label">
+           
+          {/* 이미지 업로드 */}
+          <label htmlFor="image" className="form-label me-2 mb-2">
+            이미지 업로드
+          </label>
+          <input
+            type="file"
+            className="form-control mb-3"
+            id="image"
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+
+          <label htmlFor="postContent" className="form-label mb-2">
             내용
           </label>
           <textarea
-            className="form-control"
+            className="form-control mb-3"
             id="postContent"
             onChange={(e) => setPostContent(e.target.value)}
             rows={4}
