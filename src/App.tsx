@@ -38,6 +38,7 @@ function App() {
                 <Route path='/logout' Component={Logout} />
                 <Route path='/my_page' Component={MyPage} />
                 <Route path='/profile_modify' Component={ProfileModify} />
+
             </Routes>
         </BrowserRouter>
     );
