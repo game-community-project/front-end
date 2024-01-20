@@ -12,20 +12,23 @@ interface GuestbookProps {
   const Guestbook: React.FC<GuestbookProps> = ({ toUserId }) => {
     const [comments, setComments] = useState<GuestBookDto[]>([]);
     const [newComment, setNewComment] = useState('');
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
   
     useEffect(() => {
+      fetchComments();
+        }, [page, toUserId]);
+
       const fetchComments = async () => {
         try {
-          const response = await axios.get(`http://localhost:8080/api/users/${toUserId}/guestbooks`);
+          const response = await axios.get(`http://localhost:8080/api/users/${toUserId}/guestbooks?page=${page}&size=10&sortBy=createdAt&isAsc=true`);
           setComments(response.data);
+          setTotalPages(response.data.totalPages);
         } catch (error) {
           console.error('error:', error);
-        }
-      };
-  
-      fetchComments();
-    }, [toUserId]);
-  
+        } 
+      }
+      
     const createComment = async () => {
       try {
         const response = await axios.post(`http://localhost:8080/api/users/${toUserId}/guestbooks`, { content: newComment });
@@ -51,7 +54,7 @@ interface GuestbookProps {
   
     const deleteComment = async (guestbookId: number) => {
       try {
-        await axios.delete(`/api/users/${toUserId}/guestbooks/${guestbookId}`);
+        await axios.delete(`http://localhost:8080/api/users/${toUserId}/guestbooks/${guestbookId}`);
         setComments((prevGuestbooks) => prevGuestbooks.filter((guestbook) => guestbook.id !== guestbookId));
       } catch (error) {
         console.error('error:', error);
@@ -70,20 +73,29 @@ interface GuestbookProps {
         />
         <button onClick={createComment}>작성하기</button>
   
-        {comments.map((guestbook) => (
-          <div key={guestbook.id}>
+        {comments.map((comment) => (
+          <div key={comment.id}>
             <p>
-              <strong>{guestbook.nickname}</strong> | {guestbook.content} ({guestbook.createdAt})
+              <strong>{comment.nickname}</strong> | {comment.content} ({comment.createdAt})
             </p>
             <button onClick={() => { 
-                 const updatedContent = prompt('수정할 내용을 입력하세요.', guestbook.content) || ''; 
-                 modifyComment(guestbook.id, updatedContent);
+                 const updatedContent = prompt('수정할 내용을 입력하세요.', comment.content) || ''; 
+                 modifyComment(comment.id, updatedContent);
                  }}>
               Edit
             </button>
-            <button onClick={() => deleteComment(guestbook.id)}>Delete</button>
+            <button onClick={() => deleteComment(comment.id)}>Delete</button>
           </div>
         ))}
+
+        <div>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button key={index + 1} onClick={() => setPage(index + 1)}>
+            {index + 1}
+          </button>
+        ))}
+      </div>
+
       </div>
     );
   };
