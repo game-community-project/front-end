@@ -131,9 +131,7 @@ const Post: React.FC = () => {
                         <hr />
                         <p className="mb-2 text-muted">
                             {`${post.postAuthor} | 생성시간: ${post.createdAt} | 수정시간: ${post.modifiedAt}`}
-                            <div className="goToGuestbook">
                             <button onClick={handleGoToGuestbook} style={{ float: 'right' }}>방명록</button>
-                            </div>
                         </p>
                         <hr />
                         <p>{post.postContent}</p>
