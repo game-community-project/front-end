@@ -15,6 +15,8 @@ import CreatePost from './pages/board/CreatePost';
 import UpdatePost from './pages/board/UpdatePost';
 import Logout from './pages/Logout';
 import UserList from './pages/admin/UserList';
+import OAuth from './pages/OAuth';
+
 
 function App() {
     return (
@@ -40,6 +42,7 @@ function App() {
                 <Route path='/logout' Component={Logout} />
                 <Route path='/my_page' Component={MyPage} />
                 <Route path='/profile_modify' Component={ProfileModify} />
+                <Route path='/oauth' Component={OAuth} />
             </Routes>
         </BrowserRouter>
     );
