@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/front-end/index.html/static/css/main.234b24cf.css",
-    "main.js": "/front-end/index.html/static/js/main.d58ff15e.js",
-    "static/js/787.498e3191.chunk.js": "/front-end/index.html/static/js/787.498e3191.chunk.js",
-    "static/media/game_img3.jpg": "/front-end/index.html/static/media/game_img3.ca67307b4571f0f2fead.jpg",
-    "static/media/game_img4.jpg": "/front-end/index.html/static/media/game_img4.aac2fa97e82335c5f795.jpg",
-    "static/media/game_img2.jpg": "/front-end/index.html/static/media/game_img2.9c6879c209e6351eecea.jpg",
-    "static/media/game_img6.jpg": "/front-end/index.html/static/media/game_img6.b926f8e86927cadbbc1d.jpg",
-    "static/media/game_img1.jpg": "/front-end/index.html/static/media/game_img1.50161ad01658c1460a9f.jpg",
-    "static/media/game_img5.jpg": "/front-end/index.html/static/media/game_img5.7078d647acb583e43c9b.jpg",
-    "index.html": "/front-end/index.html/index.html",
-    "main.234b24cf.css.map": "/front-end/index.html/static/css/main.234b24cf.css.map",
-    "main.d58ff15e.js.map": "/front-end/index.html/static/js/main.d58ff15e.js.map",
-    "787.498e3191.chunk.js.map": "/front-end/index.html/static/js/787.498e3191.chunk.js.map"
+    "main.css": "/front-end/static/css/main.234b24cf.css",
+    "main.js": "/front-end/static/js/main.33b468fa.js",
+    "static/js/787.498e3191.chunk.js": "/front-end/static/js/787.498e3191.chunk.js",
+    "static/media/game_img3.jpg": "/front-end/static/media/game_img3.ca67307b4571f0f2fead.jpg",
+    "static/media/game_img4.jpg": "/front-end/static/media/game_img4.aac2fa97e82335c5f795.jpg",
+    "static/media/game_img2.jpg": "/front-end/static/media/game_img2.9c6879c209e6351eecea.jpg",
+    "static/media/game_img6.jpg": "/front-end/static/media/game_img6.b926f8e86927cadbbc1d.jpg",
+    "static/media/game_img1.jpg": "/front-end/static/media/game_img1.50161ad01658c1460a9f.jpg",
+    "static/media/game_img5.jpg": "/front-end/static/media/game_img5.7078d647acb583e43c9b.jpg",
+    "index.html": "/front-end/index.html",
+    "main.234b24cf.css.map": "/front-end/static/css/main.234b24cf.css.map",
+    "main.33b468fa.js.map": "/front-end/static/js/main.33b468fa.js.map",
+    "787.498e3191.chunk.js.map": "/front-end/static/js/787.498e3191.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.234b24cf.css",
-    "static/js/main.d58ff15e.js"
+    "static/js/main.33b468fa.js"
   ]
 }
