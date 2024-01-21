@@ -13,34 +13,24 @@ const Guestbook: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [error, setError] = useState('');
 
-  const { userId } = useParams();
+  const { userId = '' } = useParams<{ userId?: string }>();
 
   //유저 검증 
   useEffect(() => {
-    const getUserData = async () => {
+    const getUser = async () => {
       try {
         const response = await axios.get(`http://localhost:8080/api/users/${userId}`);
-        setComments(response.data.guestBookList);
+        setComments(response.data.guestBookList || []);
       } catch (error) {
         console.error('사용자 정보를 가져오는 데 실패했습니다.', error);
       }
     };
 
     // userId 존재하면 사용자 정보를 가져옴
-    if (userId) {
-      getUserData();
+    if (userId && isLoggedIn()) {
+      getUser();
     }
   }, [userId]);
-
-
-  useEffect(() => {
-    if (userId  && isLoggedIn()) {
-      createComment();
-      getComments(userId , page);
-    } else {
-      console.error('로그인한 유저만 작성이 가능합니다.', error);
-    }
-  }, [page, userId ]);
 
   const isLoggedIn = () => {
     const accessToken = localStorage.getItem('accessToken');
@@ -48,16 +38,24 @@ const Guestbook: React.FC = () => {
     return !!accessToken && !!refreshToken;
   };
 
+  useEffect(() => {
+    if (userId) {
+      createComment();
+      getComments(userId , page);
+    } else {
+      console.error('로그인한 유저만 작성이 가능합니다.', error);
+    }
+  }, [page, userId ]);
+
+
   const getComments = async (userId: string, page: number) => {
     try {
+
       const response = await axios.get(`http://localhost:8080/api/users/${userId}/guestbooks?page=${page}&size=10&sortBy=createdAt&isAsc=true`);
-      if (response.data && Array.isArray(response.data.data)) {
-        setComments(response.data.data);
+ 
+        setComments(response.data.data.content);
         setTotalPages(response.data.totalPages);
-      } else {
-        // 오류 처리
-        console.error('데이터 형식이 이상합니다', response.data);
-      }
+      
     } catch (error) {
       console.error('error:', error);
     }
@@ -65,26 +63,39 @@ const Guestbook: React.FC = () => {
 
 const createComment = async () => {
   try {
-    if (!isLoggedIn() || !userId) {
-      setError('로그인이 필요합니다.'); // 로그인이 안 된 경우 에러 처리
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+
+    if (!accessToken) {
+      console.error('액세스 토큰이 없습니다.');
       return;
     }
-    const response = await axios.post(`http://localhost:8080/api/users/${userId}/guestbooks`, { content: newComment });
-    setComments([...comments, response.data]);
+
+    const response = await axios.post(`http://localhost:8080/api/users/${userId}/guestbooks`, { content: newComment },
+    {
+      headers: {
+        'Access': `${accessToken}`,
+        'Refresh': `${refreshToken}`,
+      },
+    }
+  );
+  
+    await getComments(userId, page);
     setNewComment('');
-
-    //
   } catch (error) {
-    console.error('error:', error);
+    console.error('댓글 작성 중 오류 발생:', error);
+    }
   }
-};
 
-  const modifyComment = async (guestbookId: number, updateContent: string) => {
+  const modifyComment = async (userId: string, commentId: number, updateContent: string) => {
     try {
-      const response = await axios.patch(`http://localhost:8080/api/users/${userId}/guestbooks/${guestbookId}`, { content: updateContent });
+      if (commentId == null) {
+        console.error('유효하지 않은 commentId:', commentId);
+        return;}
+      const response = await axios.patch(`http://localhost:8080/api/users/${userId}/guestbooks/${commentId}`, { content: updateContent });
       setComments((prevComments) =>
-        prevComments.map((guestbook) =>
-          guestbook.id === guestbookId ? { ...guestbook, content: response.data.content } : guestbook
+        prevComments.map((comment) =>
+          comment.id === commentId ? { ...comment, content: response.data.content } : comment
         )
       );
     } catch (error) {
@@ -92,10 +103,13 @@ const createComment = async () => {
     }
   };
   
-  const deleteComment = async (guestbookId: number) => {
+  const deleteComment = async (userId: string, commentId: number) => {
     try {
-      await axios.delete(`http://localhost:8080/api/users/${userId}/guestbooks/${guestbookId}`);
-      setComments((prevGuestbooks) => prevGuestbooks.filter((guestbook) => guestbook.id !== guestbookId));
+      if (commentId == null) {
+        console.error('유효하지 않은 commentId:', commentId);
+        return;}
+      await axios.delete(`http://localhost:8080/api/users/${userId}/guestbooks/${commentId}`);
+      setComments((prevComments) => prevComments.filter((comment) => comment.id !== commentId));
     } catch (error) {
       console.error('error:', error);
     }
@@ -114,18 +128,20 @@ const createComment = async () => {
       />
       <button onClick={createComment}>작성하기</button>
 
-      {comments.map((comment) => (
+      {comments && comments.map((comment) => (
         <div key={comment.id}>
           <p>
             <strong>{comment.nickname}</strong> | {comment.content} ({comment.createdAt})
           </p>
-          <button onClick={() => {
-            const updatedContent = prompt('수정할 내용을 입력하세요.', comment.content) || '';
-            modifyComment(comment.id, updatedContent);
-          }}>
+          <button
+            onClick={() => {
+              const updatedContent = prompt('수정할 내용을 입력하세요.', comment.content) || '';
+              modifyComment(userId, comment.id, updatedContent);
+            }}
+          >
             수정
           </button>
-          <button onClick={() => deleteComment(comment.id)}>삭제</button>
+          <button onClick={() => deleteComment(userId, comment.id)}>삭제</button>
         </div>
       ))}
 
@@ -136,9 +152,7 @@ const createComment = async () => {
           </button>
         ))}
       </div>
-
     </div>
   );
 };
-
 export default Guestbook;
