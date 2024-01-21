@@ -120,10 +120,25 @@ const createComment = async () => {
   
   const deleteComment = async (userId: string, commentId: number) => {
     try {
+      const accessToken = localStorage.getItem('accessToken');
+      const refreshToken = localStorage.getItem('refreshToken');
+  
+      if (!accessToken) {
+        console.error('액세스 토큰이 없습니다.');
+        return;
+      }
+
       if (commentId == null) {
         console.error('유효하지 않은 commentId:', commentId);
         return;}
-      await axios.delete(`http://localhost:8080/api/users/${userId}/guestbooks/${commentId}`);
+      await axios.delete(`http://localhost:8080/api/users/${userId}/guestbooks/${commentId}`,
+      {
+        headers: {
+          'Access': `${accessToken}`,
+          'Refresh': `${refreshToken}`,
+        },
+      });
+      
       setComments((prevComments) => prevComments.filter((comment) => comment.id !== commentId));
     } catch (error) {
       console.error('error:', error);
