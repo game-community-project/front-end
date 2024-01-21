@@ -78,3 +78,9 @@
     border: none;
     border-radius: 8px;
 }
+
+.post-image {
+    width: 100%; /* 이미지를 컨테이너에 맞게 조정 */
+    height: auto; /* 가로 비율 유지 */
+    margin-top: 10px; /* 이미지 위에 여백 추가 */
+}
