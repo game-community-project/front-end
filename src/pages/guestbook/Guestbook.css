@@ -29,17 +29,17 @@
 }
 
 .pagination {
-  /* Add your pagination styles here */
 }
 
 textarea {
   width: 500px;
-  height: 30px;
-  border: 1px black;
+  height: 35px;
   resize: none;
+  
 }
 
 .create {
   float: right;
   margin-left: 10px;
+  height: 35px;
 }

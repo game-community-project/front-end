@@ -162,7 +162,9 @@ const createComment = async () => {
           placeholder="방명록을 작성해주세요."
         />
        
-          <button onClick={createComment}>작성하기</button>
+          <button className="create"
+          style={{marginBottom:'30px'}}
+          onClick={createComment}>작성하기</button>
         
       </div>
 
@@ -181,7 +183,8 @@ const createComment = async () => {
               >
                 수정
               </button>
-              <button onClick={() => deleteComment(userId, comment.id)}>삭제</button>
+              <button style={{ marginLeft: '5px' }}
+              onClick={() => deleteComment(userId, comment.id)}>삭제</button>
             </div>
           </div>
         ))}
