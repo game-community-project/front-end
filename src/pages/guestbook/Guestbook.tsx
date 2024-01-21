@@ -146,36 +146,47 @@ const createComment = async () => {
   };
 
   return (
-    <div>
+    <div className="box">
       {error && <div className="error">{error}</div>}
       <div className="title">
-        <h4>🔅방명록🔅</h4>
+        <p>
+          <strong style={{ fontSize: '1.2rem' }}>
+            🚨 부적절한 내용은 신고의 대상이 될 수 있습니다.
+          </strong>
+        </p>
       </div>
-      <textarea
-        value={newComment}
-        onChange={(e) => setNewComment(e.target.value)}
-        placeholder="방명록을 작성해주세요."
-      />
-      <button onClick={createComment}>작성하기</button>
+      <div className="comment-section">
+        <textarea
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+          placeholder="방명록을 작성해주세요."
+        />
+       
+          <button onClick={createComment}>작성하기</button>
+        
+      </div>
 
-      {comments && comments.map((comment) => (
-        <div key={comment.id}>
-          <p>
-            <strong>{comment.nickname}</strong> | {comment.content} ({comment.createdAt})
-          </p>
-          <button
-            onClick={() => {
-              const updatedContent = prompt('수정할 내용을 입력하세요.', comment.content) || '';
-              modifyComment(userId, comment.id, updatedContent);
-            }}
-          >
-            수정
-          </button>
-          <button onClick={() => deleteComment(userId, comment.id)}>삭제</button>
-        </div>
-      ))}
+      {comments &&
+        comments.map((comment) => (
+          <div key={comment.id} className="comment">
+            <p>
+              <strong>{comment.nickname}</strong> | {comment.content} ({comment.createdAt})
+            </p>
+            <div className="actions">
+              <button
+                onClick={() => {
+                  const updatedContent = prompt('수정할 내용을 입력하세요.', comment.content) || '';
+                  modifyComment(userId, comment.id, updatedContent);
+                }}
+              >
+                수정
+              </button>
+              <button onClick={() => deleteComment(userId, comment.id)}>삭제</button>
+            </div>
+          </div>
+        ))}
 
-      <div>
+      <div className="pagination">
         {Array.from({ length: totalPages }, (_, index) => (
           <button key={index + 1} onClick={() => setPage(index + 1)}>
             {index + 1}
