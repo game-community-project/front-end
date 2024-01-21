@@ -334,7 +334,7 @@ const Post: React.FC = () => {
             )}
             <div className="comments-container">
                 {comments.map(comment => (
-                    <div key={comment.commentId} className="comment">
+                    <div key={comment.commentId} className="post-container">
                         <p>
                             {comment.author} | 작성시간: {comment.createdAt} | 수정시간: {comment.modifiedAt}
                             <div className="comment-actions">
