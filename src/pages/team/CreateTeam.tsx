@@ -38,7 +38,7 @@ const CreateTeam: React.FC = () => {
       }
 
       const response = await axios.post(
-          'http://localhost:8080/api/teams',
+          'http://51.21.48.160:8080/api/teams',
           {
             teamName: teamName,
             teamIntroduction: teamIntroduction,

@@ -12,7 +12,7 @@ const AddUserToTeam: React.FC = () => {
   useEffect(() => {
     const fetchTeamMembers = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/teams/${teamId}/users`);
+        const response = await axios.get(`http://51.21.48.160:8080/api/teams/${teamId}/users`);
         if (response.status === 200) {
           setTeamMembers(response.data.data);
         } else {
@@ -46,7 +46,7 @@ const AddUserToTeam: React.FC = () => {
         nickname: nickname,
       };
 
-      const response = await axios.post(`http://localhost:8080/api/teams/${teamId}/addUser?nickname=${nickname}`, data, config);
+      const response = await axios.post(`http://51.21.48.160:8080/api/teams/${teamId}/addUser?nickname=${nickname}`, data, config);
       if (response.status === 200) {
         console.log('유저 추가 성공');
         alert('유저 추가 성공');

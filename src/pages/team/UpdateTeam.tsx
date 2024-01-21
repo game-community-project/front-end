@@ -13,7 +13,7 @@ const UpdateTeam: React.FC = () => {
   useEffect(() => {
     const fetchTeamInfo = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/teams/${teamId}`);
+        const response = await axios.get(`http://51.21.48.160:8080/api/teams/${teamId}`);
         if (response.status === 200) {
           const { teamName, teamIntroduction ,gameName} = response.data.data;
           console.log(response);
@@ -54,7 +54,7 @@ const UpdateTeam: React.FC = () => {
         gameName: gameName
       };
 
-      const response = await axios.patch(`http://localhost:8080/api/teams/${teamId}`, data, config);
+      const response = await axios.patch(`http://51.21.48.160:8080/api/teams/${teamId}`, data, config);
       if (response.status === 200) {
         console.log('팀 수정 성공');
         alert('팀 수정 성공');
