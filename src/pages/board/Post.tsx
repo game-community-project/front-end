@@ -20,6 +20,7 @@ const Post: React.FC = () => {
     const navigate = useNavigate();
     const { postId } = useParams();
     const [post, setPost] = useState<PostDto | null>(null);
+    const [userId, setUserId] = useState<string | undefined>(undefined);
     const [likeCount, setLikeCount] = useState<number>(0);
     const [unlikeCount, setUnlikeCount] = useState<number>(0);
 
@@ -28,6 +29,7 @@ const Post: React.FC = () => {
     }, [postId]);
 
     const getPost = async (id: string | undefined) => {
+
         try {
           const res = await axios.get(`http://localhost:8080/api/posts/${postId}`);
           const postData = res.data.data;
@@ -49,10 +51,21 @@ const Post: React.FC = () => {
       
           setLikeCount(postData.postLike);
           setUnlikeCount(postData.postUnlike);
+
+          const userId = postData.userId;
+          if (userId) {
+          console.log('User ID:', userId);
+          setUserId(userId);
+          }
         } catch (error) {
           console.error('에러:', error);
         }
       };
+
+      const handleGoToGuestbook  = () => {
+        navigate(`/guestbooks/${userId}`)
+      }
+
     // 좋아요(true) 또는 싫어요(false)
     const isLike = async (isLike: boolean) => {
         try {
@@ -118,6 +131,7 @@ const Post: React.FC = () => {
                         <hr />
                         <p className="mb-2 text-muted">
                             {`${post.postAuthor} | 생성시간: ${post.createdAt} | 수정시간: ${post.modifiedAt}`}
+                            <button onClick={handleGoToGuestbook} style={{ float: 'right' }}>방명록</button>
                         </p>
                         <hr />
                         <p>{post.postContent}</p>
