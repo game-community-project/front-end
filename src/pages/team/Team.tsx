@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { TeamDto } from '../../dto/Team';
-import { Link, useNavigate } from 'react-router-dom';
+import {TeamDto} from '../../dto/Team';
+import {Link, useNavigate} from 'react-router-dom';
 
 import './Team.css';
 
@@ -9,12 +9,11 @@ interface TeamProps {
   gameName: string;
 }
 
-const Team: React.FC<TeamProps> = ({ gameName }) => {
+const Team: React.FC<TeamProps> = ({gameName}) => {
   const navigate = useNavigate();
   const [teams, setTeams] = useState<TeamDto[] | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTeamName, setNewTeamName] = useState('');
   const [userTeams, setUserTeams] = useState<TeamDto[] | null>(null);
 
@@ -72,14 +71,6 @@ const Team: React.FC<TeamProps> = ({ gameName }) => {
     setCurrentPage(newPage);
   };
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setNewTeamName('');
-  };
 
   const createNewTeam = async () => {
     try {
@@ -87,7 +78,6 @@ const Team: React.FC<TeamProps> = ({ gameName }) => {
         teamName: newTeamName,
       });
 
-      closeModal();
 
       navigate(`/team/${res.data.data.teamId}`);
     } catch (error) {
@@ -95,35 +85,6 @@ const Team: React.FC<TeamProps> = ({ gameName }) => {
     }
   };
 
-  const deleteTeam = async (teamId: number) => {
-    try {
-      const accessToken = localStorage.getItem('accessToken');
-      if (!accessToken) {
-        console.error('액세스 토큰이 없습니다.');
-        alert('로그인하고 이용해주세요');
-        navigate('/');
-        return;
-      }
-
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access': `${accessToken}`,
-        },
-      };
-
-      const res = await axios.delete(`http://localhost:8080/api/teams/${teamId}`, config);
-
-      if (res.status === 200) {
-        alert('팀이 성공적으로 삭제되었습니다.');
-      } else {
-        console.error('팀 삭제에 실패했습니다.');
-      }
-      window.location.reload();
-    } catch (error) {
-      console.error('에러:', error);
-    }
-  };
 
   return (
       <div className="container mt-4">
@@ -138,13 +99,12 @@ const Team: React.FC<TeamProps> = ({ gameName }) => {
                         <h2 className="team-name">{team.teamName}</h2>
                       </Link>
                       <p className="team-introduction">{team.teamIntroduction}</p>
-                      <button className="btn btn-danger" onClick={() => deleteTeam(team.teamId)}>팀 삭제</button>
                     </li>
                 ))}
               </ul>
 
               <div className="pagination mt-3">
-                {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                {Array.from({length: totalPages}, (_, index) => index + 1).map((page) => (
                     <span
                         key={page}
                         className={`page-item ${page === currentPage ? "active" : ""}`}
@@ -164,13 +124,12 @@ const Team: React.FC<TeamProps> = ({ gameName }) => {
                         <h2 className="team-name">{team.teamName}</h2>
                       </Link>
                       <p className="team-introduction">{team.teamIntroduction}</p>
-                      <button className="btn btn-danger" onClick={() => deleteTeam(team.teamId)}>팀 삭제</button>
                     </li>
                 ))}
               </ul>
 
               <div className="pagination mt-3">
-                {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                {Array.from({length: totalPages}, (_, index) => index + 1).map((page) => (
                     <span
                         key={page}
                         className={`page-item ${page === currentPage ? "active" : ""}`}
@@ -183,30 +142,6 @@ const Team: React.FC<TeamProps> = ({ gameName }) => {
             </div>
         ) : (
             <p>팀이 없습니다.</p>
-        )}
-
-        {isModalOpen && (
-            <div className="modal fade show" style={{ display: 'block' }} tabIndex={-1} role="dialog">
-              <div className="modal-dialog">
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <h2 className="modal-title">Create New Team</h2>
-                    <button type="button" className="btn-close" onClick={closeModal}></button>
-                  </div>
-                  <div className="modal-body">
-                    <label className="form-label">
-                      Team Name:
-                      <input
-                          type="text"
-                          className="form-control"
-                          value={newTeamName}
-                          onChange={(e) => setNewTeamName(e.target.value)}
-                      />
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
         )}
 
         <Link to="/create_team" className="btn btn-primary mt-3">

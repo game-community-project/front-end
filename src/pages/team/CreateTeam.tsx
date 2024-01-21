@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 const CreateTeam: React.FC = () => {
   const navigate = useNavigate();
@@ -9,7 +9,7 @@ const CreateTeam: React.FC = () => {
   const [gameName, setGameName] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const {name, value} = e.target;
     switch (name) {
       case 'teamName':
         setTeamName(value);
@@ -100,7 +100,6 @@ const CreateTeam: React.FC = () => {
               placeholder="팀 소개를 입력해주세요"
           />
 
-          {/* 게임 선택 부분 추가 */}
           <label htmlFor="gameName" className="form-label mb-2">
             게임 이름
           </label>

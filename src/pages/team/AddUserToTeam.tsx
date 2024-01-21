@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
 
+
 const AddUserToTeam: React.FC = () => {
-  const {teamId } = useParams();
+  const {teamId} = useParams();
   const [nickname, setNickname] = useState('');
   const [teamMembers, setTeamMembers] = useState<string[] | null>(null);
   const navigate = useNavigate();
@@ -11,7 +12,6 @@ const AddUserToTeam: React.FC = () => {
   useEffect(() => {
     const fetchTeamMembers = async () => {
       try {
-
         const response = await axios.get(`http://localhost:8080/api/teams/${teamId}/users`);
         if (response.status === 200) {
           setTeamMembers(response.data.data);
@@ -42,20 +42,23 @@ const AddUserToTeam: React.FC = () => {
           'Access': `${accessToken}`,
         },
       };
-
       const data = {
         nickname: nickname,
       };
 
-      const response = await axios.post(`http://localhost:8080/api/teams/${teamId}/addUser?nickname=${nickname}`,data,config);
+      const response = await axios.post(`http://localhost:8080/api/teams/${teamId}/addUser?nickname=${nickname}`, data, config);
       if (response.status === 200) {
         console.log('유저 추가 성공');
-        // 추가 성공 시 필요한 처리를 수행할 수 있습니다.
+        alert('유저 추가 성공');
+        window.location.reload()
+
       } else {
         console.error('유저 추가 실패');
+        alert('유저 추가 실패');
       }
     } catch (error) {
       console.error('유저 추가 도중 에러 발생:', error);
+      alert('유저 추가 도중 에러 발생');
     }
   };
 
@@ -100,6 +103,7 @@ const AddUserToTeam: React.FC = () => {
               <p>Loading...</p>
           )}
         </div>
+
       </div>
   );
 };

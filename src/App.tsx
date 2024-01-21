@@ -17,6 +17,8 @@ import Logout from './pages/Logout';
 import CreateTeam from "./pages/team/CreateTeam";
 import TeamPage from "./pages/team/TeamPage";
 import AddUserToTeam from "./pages/team/AddUserToTeam";
+import DeleteUserFromTeam from "./pages/team/DeleteUserFromTeam";
+import UpdateTeam from "./pages/team/UpdateTeam";
 
 function App() {
     return (
@@ -35,6 +37,8 @@ function App() {
                 <Route path="/create_team" Component={CreateTeam} />
                 <Route path="/teams/:teamId" Component={TeamPage} />
                 <Route path="/teams/:teamId/add_user" Component={AddUserToTeam} />
+                <Route path="/teams/:teamId/kick_user" Component={DeleteUserFromTeam} />
+                <Route path="/teams/:teamId/update" Component={UpdateTeam}/>
                 <Route path="/modify_post/:postId" Component={UpdatePost} />
                 <Route path='/admin' Component={Admin} />
                 <Route path='/admin/reported_posts' Component={ReportedPosts} />

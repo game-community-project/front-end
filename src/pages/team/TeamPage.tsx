@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {useParams, Link} from 'react-router-dom';
+import { useParams, Link ,useNavigate} from 'react-router-dom';
 
 interface TeamInfoData {
   teamId: string;
@@ -10,7 +10,8 @@ interface TeamInfoData {
 }
 
 const TeamInfo: React.FC = () => {
-  const {teamId} = useParams();
+  const {teamId =''} = useParams();
+  const navigate = useNavigate();
   const [teamInfo, setTeamInfo] = useState<TeamInfoData | null>(null);
   const [adminName, setAdminName] = useState<string | null>(null);
   const [users, setUsers] = useState<string[] | null>(null);
@@ -60,6 +61,37 @@ const TeamInfo: React.FC = () => {
     fetchTeamInfo();
   }, [teamId]);
 
+  const deleteTeam = async (teamId: string) => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        console.error('액세스 토큰이 없습니다.');
+        alert('로그인하고 이용해주세요');
+        navigate('/')
+        return;
+      }
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access': `${accessToken}`,
+        },
+      };
+
+      const res = await axios.delete(`http://localhost:8080/api/teams/${teamId}`, config);
+
+      if (res.status === 200) {
+        alert('팀이 성공적으로 삭제되었습니다.');
+        navigate('/')
+      } else {
+        console.error('팀 삭제에 실패했습니다.');
+      }
+      window.location.reload();
+    } catch (error) {
+      console.error('에러:', error);
+    }
+  };
+
   if (!teamInfo || adminName === null) {
     return <div className="container mt-4">Loading...</div>;
   }
@@ -93,11 +125,17 @@ const TeamInfo: React.FC = () => {
 
         {isTeamAdmin && (
             <div className="mt-4">
-              <Link to={`/teams/${teamId}/add_user`} className="btn btn-primary me-2">
+              <Link to={`/teams/${teamId}/add_user`} className="btn btn-primary  me-2">
                 유저 추가
               </Link>
-              <Link to={`/teams/${teamId}/kick_user`} className="btn btn-danger">
+              <Link to={`/teams/${teamId}/kick_user`} className="btn btn-danger  me-2">
                 유저 추방
+              </Link>
+              <button className="btn btn-danger  me-2" onClick={() => deleteTeam(teamId)}>
+                팀 삭제
+              </button>
+              <Link to={`/teams/${teamId}/update`} className="btn btn-warning">
+                팀 수정
               </Link>
             </div>
         )}
