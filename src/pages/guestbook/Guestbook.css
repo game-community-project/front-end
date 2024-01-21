@@ -1,0 +1,45 @@
+.box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Add other box styles as needed */
+}
+
+.title {
+  /* Add your title styles here */
+}
+
+.comment-section {
+  width: 100%; /* Take up the full width */
+  max-width: 600px; /* Adjust the maximum width as needed */
+  
+}
+
+.comment {
+  width: 100%; /* Take up the full width */
+  max-width: 600px; /* Adjust the maximum width as needed */
+  /* Add other comment styles as needed */
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.actions {
+  display: flex;
+}
+
+.pagination {
+}
+
+textarea {
+  width: 500px;
+  height: 35px;
+  resize: none;
+  
+}
+
+.create {
+  float: right;
+  margin-left: 10px;
+  height: 35px;
+}
