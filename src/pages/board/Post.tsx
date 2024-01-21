@@ -17,11 +17,11 @@ const config = {
 }
 
 interface CommentDto {
-    id: number;
-    postId: number;
+    commentId: number;
     author: string;
     content: string;
     createdAt: string;
+    modifiedAt: string;
 }
 
 interface commentProps {
@@ -37,6 +37,12 @@ const Post: React.FC = () => {
     const [unlikeCount, setUnlikeCount] = useState<number>(0);
     const [isWriteComment, setIsWriteComment] = useState(false);
     const [comments, setComments] = useState<CommentDto[]>([]);
+    const [comment, setComment] = useState('');
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalPages, setTotalPages] = useState<number>(1);
+    const [commentsPerPage] = useState<number>(10);
+    const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+    const [editedComment, setEditedComment] = useState<string>('');
 
     useEffect(() => {
         getPost(postId);
@@ -52,12 +58,11 @@ const Post: React.FC = () => {
                 const urlParts = postData.postImageUrl.split('/');
                 const objectKey = urlParts[urlParts.length - 1];
 
-                // 이미지가 있다면 S3에서 이미지 URL 생성
                 const imageUrl = `https://${config.bucketName}.s3.amazonaws.com/${objectKey}`;
 
                 setPost({
                     ...postData,
-                    postImageUrl: imageUrl, // 이미지 URL 추가
+                    postImageUrl: imageUrl,
                 });
             } else {
                 setPost(postData);
@@ -69,11 +74,10 @@ const Post: React.FC = () => {
             console.error('에러:', error);
         }
     };
-    // 좋아요(true) 또는 싫어요(false)
+
     const isLike = async (isLike: boolean) => {
         try {
             const accessToken = localStorage.getItem('accessToken');
-            console.log(accessToken);
             if (!accessToken) {
                 console.error('액세스 토큰이 없습니다.');
                 alert('로그인하고 이용해주세요')
@@ -97,7 +101,6 @@ const Post: React.FC = () => {
         }
     };
 
-    // 게시글 삭제
     const deletePost = async () => {
         try {
             const accessToken = localStorage.getItem('accessToken');
@@ -119,25 +122,26 @@ const Post: React.FC = () => {
             navigate(`/pc/lol`);
             window.location.reload();
 
-
         } catch (error) {
             console.error('에러:', error);
         }
     };
 
-
     const handleWriteCommentView = () => {
         setIsWriteComment(true);
     }
+
     const handleWriteCommentHide = () => {
         setIsWriteComment(false);
     }
 
-    const getComments = async (postId: string | undefined) => {
+    const getComments = async (postId: string | undefined, page: number = 1) => {
         try {
-            const res = await axios.get(`http://localhost:8080/api/posts/${postId}/comments?page=1&size=10&sortBy=id&isAsc=true`);
-            setComments(res.data.data.content); // content를 사용하여 댓글 목록을 가져옴
-    
+            const res = await axios.get(
+                `http://localhost:8080/api/posts/${postId}/comments?page=${page}&size=${commentsPerPage}&sortBy=createdAt&isAsc=true`
+            );
+            setComments(res.data.data.content);
+            setTotalPages(res.data.data.totalPages);
         } catch (error) {
             console.error('댓글을 가져오는 중 에러 발생:', error);
         }
@@ -161,20 +165,98 @@ const Post: React.FC = () => {
             };
 
             const commentData = {
-                content: comments.map(comment => comment.content).join(', '), // 배열을 문자열로 변환
+                content: comment,
             };
 
             await axios.post(`http://localhost:8080/api/posts/${postId}/comments`, commentData, config);
 
-            // 댓글을 작성한 후 댓글을 다시 가져오기
             getComments(postId);
-
-            // 댓글 입력란 초기화
-            setComments([]);
+            setComment('');
 
         } catch (error) {
             console.error('댓글을 저장하는 중 에러 발생:', error);
         }
+    };
+
+    const handleEditComment = (commentId: number) => {
+        const selectedComment = comments.find(comment => comment.commentId === commentId);
+
+        if (selectedComment) {
+            setEditingCommentId(commentId);
+            setEditedComment(selectedComment.content);
+        }
+    };
+
+    const handleCancelEditComment = () => {
+        setEditingCommentId(null);
+        setEditedComment('');
+    };
+
+    const handleSaveEditedComment = async () => {
+        try {
+            const accessToken = localStorage.getItem('accessToken');
+            if (!accessToken) {
+                console.error('액세스 토큰이 없습니다.');
+                alert('댓글을 편집하려면 로그인이 필요합니다.');
+                navigate('/');
+                return;
+            }
+
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access': `${accessToken}`,
+                },
+            };
+
+            const editedCommentData = {
+                content: editedComment,
+            };
+
+            await axios.put(`http://localhost:8080/api/posts/${postId}/comments/${editingCommentId}`, editedCommentData, config);
+
+            // 편집 후 댓글 갱신
+            getComments(postId);
+
+            // 편집 상태 초기화
+            setEditingCommentId(null);
+            setEditedComment('');
+
+        } catch (error) {
+            console.error('댓글을 편집하는 중 에러 발생:', error);
+        }
+    };
+
+    const handleDeleteComment = async (commentId: number) => {
+        try {
+            const accessToken = localStorage.getItem('accessToken');
+            if (!accessToken) {
+                console.error('액세스 토큰이 없습니다.');
+                alert('댓글을 삭제하려면 로그인이 필요합니다.');
+                navigate('/');
+                return;
+            }
+
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access': `${accessToken}`,
+                },
+            };
+
+            await axios.delete(`http://localhost:8080/api/posts/${postId}/comments/${commentId}`, config);
+
+            // 삭제 후 댓글 갱신
+            getComments(postId);
+        } catch (error) {
+            console.error('댓글을 삭제하는 중 에러 발생:', error);
+        }
+    };
+
+
+    const handlePageChange = (newPage: number) => {
+        setCurrentPage(newPage);
+        getComments(postId, newPage);
     };
 
     return (
@@ -216,7 +298,7 @@ const Post: React.FC = () => {
                         <span className="post-stat">{post.postUnlike}</span>
                     </div>
                     <div className="edit-delete-buttons">
-                        <Link to={`/modify_post/${postId}`} className="btn btn-primary">
+                        <Link to={`/modify_post/${postId}`} className="btn btn-edit">
                             수정
                         </Link>
                         <button className="btn btn-delete" onClick={deletePost}>
@@ -225,34 +307,80 @@ const Post: React.FC = () => {
                     </div>
                     <Button variant='outline-primary' onClick={handleWriteCommentView}>댓글 작성</Button>
                 </div>
-            )
-            }
-                {isWriteComment && (<CommentView onCommentCancel={handleWriteCommentHide} onCommentComplete={saveComment}/>)}
-                <div className="comments-container">
-                <h3>댓글</h3>
+            )}
+            {isWriteComment && (
+                <div className='post-container'>
+                    <Button variant='outline-primary' onClick={saveComment} >작성 완료</Button>{' '}
+                    <Button variant='outline-warning' onClick={handleWriteCommentHide} >작성 취소</Button>
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                        <Form.Control placeholder='댓글을 작성해 주세요.' as="textarea" rows={3} onChange={e => setComment(e.target.value)} />
+                    </Form.Group>
+                </div>
+            )}
+            <div className="comments-container">
                 {comments.map(comment => (
-                    <div key={comment.id} className="comment">
-                        <p>{comment.author} - {comment.createdAt}</p>
-                        <p>{comment.content}</p>
+                    <div key={comment.commentId} className="comment">
+                        <p>
+                            {comment.author} | 작성시간: {comment.createdAt} | 수정시간: {comment.modifiedAt}
+                            <div className="comment-actions">
+                                <span className="spacer" />
+                                {editingCommentId !== comment.commentId ? (
+                                    <>
+                                        <button className="btn-edit" onClick={() => handleEditComment(comment.commentId)}>
+                                            수정
+                                        </button>
+                                        <button className="btn-delete" onClick={() => handleDeleteComment(comment.commentId)}>
+                                            삭제
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <button className="btn-edit" onClick={handleSaveEditedComment}>
+                                            확인
+                                        </button>
+                                        <button className="btn-delete" onClick={handleCancelEditComment}>
+                                            취소
+                                        </button>
+                                    </>
+                                )}
+                            </div>
+                        </p>
+                        <hr />
+                        {editingCommentId === comment.commentId ? (
+                            <textarea value={editedComment} onChange={(e) => setEditedComment(e.target.value)} />
+                        ) : (
+                            <p>{comment.content}</p>
+                        )}
                     </div>
                 ))}
+                {totalPages > 1 && (
+                    <div className="pagination">
+                        <span
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            className={`pagination-button ${currentPage === 1 ? 'disabled' : ''}`}
+                        >
+                            이전
+                        </span>
+                        {Array.from({ length: totalPages }, (_, index) => (
+                            <span
+                                key={index + 1}
+                                className={currentPage === index + 1 ? 'active' : ''}
+                                onClick={() => handlePageChange(index + 1)}
+                            >
+                                {index + 1}
+                            </span>
+                        ))}
+                        <span
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            className={`pagination-button ${currentPage === totalPages ? 'disabled' : ''}`}
+                        >
+                            다음
+                        </span>
+                    </div>
+                )}
             </div>
         </>
     );
 };
 
 export default Post;
-
-function CommentView({ onCommentCancel: onCommentCancel, onCommentComplete: onCommentComplete }: commentProps) {
-    const [comment, setComment] = useState('');
-
-    return (
-        <div className='post-container'>
-            <Button variant='outline-primary' onClick={onCommentComplete} >작성 완료</Button>{' '}
-            <Button variant='outline-warning' onClick={onCommentCancel} >작성 취소</Button>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                <Form.Control placeholder='댓글을 작성해 주세요.' as="textarea" rows={3} onChange={e=>setComment(e.target.value)} />
-            </Form.Group>
-        </div>
-    )
-}
