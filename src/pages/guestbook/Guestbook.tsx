@@ -89,15 +89,30 @@ const createComment = async () => {
 
   const modifyComment = async (userId: string, commentId: number, updateContent: string) => {
     try {
+      const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+
+    if (!accessToken) {
+      console.error('액세스 토큰이 없습니다.');
+      return;
+    }
+
       if (commentId == null) {
         console.error('유효하지 않은 commentId:', commentId);
-        return;}
-      const response = await axios.patch(`http://localhost:8080/api/users/${userId}/guestbooks/${commentId}`, { content: updateContent });
-      setComments((prevComments) =>
-        prevComments.map((comment) =>
-          comment.id === commentId ? { ...comment, content: response.data.content } : comment
-        )
-      );
+        return;
+      }
+
+      const response = await axios.patch(`http://localhost:8080/api/users/${userId}/guestbooks/${commentId}`, { content: updateContent },
+      {
+        headers: {
+          'Access': `${accessToken}`,
+          'Refresh': `${refreshToken}`,
+        },
+      });
+      
+      await getComments(userId, page);
+
+
     } catch (error) {
       console.error('error:', error);
     }
