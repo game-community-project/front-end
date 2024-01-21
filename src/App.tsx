@@ -7,7 +7,7 @@ import Board from './pages/board/Board';
 import Post from './pages/board/Post';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
-import Admin from './pages/admin/Admin';
+import UserInfo from './pages/admin/UserInfo';
 import ReportedPosts from './pages/admin/ReportedPosts';
 import MyPage from './pages/user/MyPage';
 import ProfileModify from './pages/user/ProfileModify';
@@ -19,6 +19,10 @@ import TeamPage from "./pages/team/TeamPage";
 import AddUserToTeam from "./pages/team/AddUserToTeam";
 import DeleteUserFromTeam from "./pages/team/DeleteUserFromTeam";
 import UpdateTeam from "./pages/team/UpdateTeam";
+import Guestbook from './pages/guestbook/Guestbook';
+import UserList from './pages/admin/UserList';
+import OAuth from './pages/OAuth';
+
 
 function App() {
     return (
@@ -40,7 +44,8 @@ function App() {
                 <Route path="/teams/:teamId/kick_user" Component={DeleteUserFromTeam} />
                 <Route path="/teams/:teamId/update" Component={UpdateTeam}/>
                 <Route path="/modify_post/:postId" Component={UpdatePost} />
-                <Route path='/admin' Component={Admin} />
+                <Route path='/admin/:param_nick' Component={UserInfo} />
+                <Route path='/admin/user_list' Component={UserList} />
                 <Route path='/admin/reported_posts' Component={ReportedPosts} />
                 <Route path='/*' element={'찾을 수 없는 페이지 입니다.'} />
                 <Route path='/signup' Component={Signup} />
@@ -48,6 +53,8 @@ function App() {
                 <Route path='/logout' Component={Logout} />
                 <Route path='/my_page' Component={MyPage} />
                 <Route path='/profile_modify' Component={ProfileModify} />
+                <Route path='/guestbooks/:userId' Component={Guestbook} /> 
+                <Route path='/oauth' Component={OAuth} />
             </Routes>
         </BrowserRouter>
     );

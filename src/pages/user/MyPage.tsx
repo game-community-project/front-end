@@ -6,9 +6,14 @@ import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 
+
 const MyPage: React.FC = () => {
   const [user, setUser] = useState<UserDto | null>(null);
   const navigate = useNavigate();
+
+  const handleGoToGuestbook  = () => {
+    navigate("/guestbook")
+  }
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -83,6 +88,7 @@ const MyPage: React.FC = () => {
         <p>Loading...</p>
       )}
     <Button variant="warning" onClick={goToProfileModify}>수정</Button>
+    <button onClick={handleGoToGuestbook}>방명록</button>
     </div>
   );
 };
