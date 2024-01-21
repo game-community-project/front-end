@@ -36,7 +36,7 @@ const Board: React.FC<BoardProps> = ({ gameType, gameName }) => {
         console.log(adjustedSelectedBoard);
 
         const res = await axios.get(
-          `http://localhost:8080/api/posts?type=${gameType}&game=${gameName}&board=${adjustedSelectedBoard}&page=${currentPage}&size=10&sortKey=createdAt&isAsc=false`
+          `http://51.21.48.160:8080//api/posts?type=${gameType}&game=${gameName}&board=${adjustedSelectedBoard}&page=${currentPage}&size=10&sortKey=createdAt&isAsc=false`
         );
         console.log(res);
         setBoard(res.data.data.content);

@@ -13,7 +13,7 @@ function UserList() {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const url = `http://localhost:8080/api/admin/users`;
+				const url = `http://51.21.48.160:8080/api/admin/users`;
 				const resp = await axios.get(url, {
 					headers: {
 						access: accessToken,

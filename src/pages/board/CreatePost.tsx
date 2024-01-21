@@ -74,7 +74,7 @@ function CreatePost() {
         formData.append('file', selectedImage);
       }
 
-      const response = fetch(`http://localhost:8080/api/posts?gameType=${gameType}&gameName=${gameName}&boardName=${boardName}`, {
+      const response = fetch(`http://51.21.48.160:8080/api/posts?gameType=${gameType}&gameName=${gameName}&boardName=${boardName}`, {
         method: 'POST',
         body: formData,
         headers: {
