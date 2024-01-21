@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import S3 from 'react-s3';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { PostDto } from '../../dto/Post';
 
@@ -17,6 +16,14 @@ const config = {
     secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
 }
 
+interface CommentDto {
+    id: number;
+    postId: number;
+    author: string;
+    content: string;
+    createdAt: string;
+}
+
 interface commentProps {
     onCommentCancel: () => void;
     onCommentComplete: () => void;
@@ -29,9 +36,11 @@ const Post: React.FC = () => {
     const [likeCount, setLikeCount] = useState<number>(0);
     const [unlikeCount, setUnlikeCount] = useState<number>(0);
     const [isWriteComment, setIsWriteComment] = useState(false);
+    const [comments, setComments] = useState<CommentDto[]>([]);
 
     useEffect(() => {
         getPost(postId);
+        getComments(postId);
     }, [postId]);
 
     const getPost = async (id: string | undefined) => {
@@ -124,6 +133,50 @@ const Post: React.FC = () => {
         setIsWriteComment(false);
     }
 
+    const getComments = async (postId: string | undefined) => {
+        try {
+            const res = await axios.get(`http://localhost:8080/api/posts/${postId}/comments?page=1&size=10&sortBy=id&isAsc=true`);
+            setComments(res.data.data.content); // content를 사용하여 댓글 목록을 가져옴
+    
+        } catch (error) {
+            console.error('댓글을 가져오는 중 에러 발생:', error);
+        }
+    };
+
+    const saveComment = async () => {
+        try {
+            const accessToken = localStorage.getItem('accessToken');
+            if (!accessToken) {
+                console.error('액세스 토큰이 없습니다.');
+                alert('댓글을 작성하려면 로그인이 필요합니다.');
+                navigate('/');
+                return;
+            }
+
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access': `${accessToken}`,
+                },
+            };
+
+            const commentData = {
+                content: comments.map(comment => comment.content).join(', '), // 배열을 문자열로 변환
+            };
+
+            await axios.post(`http://localhost:8080/api/posts/${postId}/comments`, commentData, config);
+
+            // 댓글을 작성한 후 댓글을 다시 가져오기
+            getComments(postId);
+
+            // 댓글 입력란 초기화
+            setComments([]);
+
+        } catch (error) {
+            console.error('댓글을 저장하는 중 에러 발생:', error);
+        }
+    };
+
     return (
         <>
             {post && (
@@ -175,6 +228,15 @@ const Post: React.FC = () => {
             )
             }
                 {isWriteComment && (<CommentView onCommentCancel={handleWriteCommentHide} onCommentComplete={saveComment}/>)}
+                <div className="comments-container">
+                <h3>댓글</h3>
+                {comments.map(comment => (
+                    <div key={comment.id} className="comment">
+                        <p>{comment.author} - {comment.createdAt}</p>
+                        <p>{comment.content}</p>
+                    </div>
+                ))}
+            </div>
         </>
     );
 };
@@ -193,8 +255,4 @@ function CommentView({ onCommentCancel: onCommentCancel, onCommentComplete: onCo
             </Form.Group>
         </div>
     )
-}
-
-function saveComment() {
-    alert('댓글!')
 }
