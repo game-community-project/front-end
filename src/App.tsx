@@ -7,14 +7,16 @@ import Board from './pages/board/Board';
 import Post from './pages/board/Post';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
-import Admin from './pages/admin/Admin';
+import UserInfo from './pages/admin/UserInfo';
 import ReportedPosts from './pages/admin/ReportedPosts';
 import MyPage from './pages/user/MyPage';
 import ProfileModify from './pages/user/ProfileModify';
 import CreatePost from './pages/board/CreatePost';
 import UpdatePost from './pages/board/UpdatePost';
 import Logout from './pages/Logout';
+import UserList from './pages/admin/UserList';
 import OAuth from './pages/OAuth';
+
 
 function App() {
     return (
@@ -31,7 +33,8 @@ function App() {
                 <Route path="/:gameType/:gameName/:postId" Component={Post} />
                 <Route path="/write_post" Component={CreatePost} />
                 <Route path="/modify_post/:postId" Component={UpdatePost} />
-                <Route path='/admin' Component={Admin} />
+                <Route path='/admin/:param_nick' Component={UserInfo} />
+                <Route path='/admin/user_list' Component={UserList} />
                 <Route path='/admin/reported_posts' Component={ReportedPosts} />
                 <Route path='/*' element={'찾을 수 없는 페이지 입니다.'} />
                 <Route path='/signup' Component={Signup} />
