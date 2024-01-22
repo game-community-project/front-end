@@ -25,7 +25,7 @@ const ProfileModify: React.FC = () => {
     const fetchUserData = async () => {
       try {
         // 서버의 유저 정보 가져오기 엔드포인트 URL
-        const fetchUserUrl = 'http://localhost:8080/api/users/profile';
+        const fetchUserUrl = 'http://51.21.48.160:8080/api/users/profile';
 
         // Axios를 사용하여 GET 요청 보내기
         const response = await axios.get(fetchUserUrl, {
