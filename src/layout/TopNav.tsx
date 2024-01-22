@@ -60,14 +60,14 @@ function TopNav() {
 					>
 						<Nav.Link><NavLink to='/' style={{ textDecoration: 'none', color: 'inherit' }}>홈</NavLink></Nav.Link>
 						<NavDropdown title="PC게임" id="navbarScrollingDropdown">
-							<NavDropdown.Item href="/pc/lol">LOL</NavDropdown.Item>
-							<NavDropdown.Item href="/pc/val">발로란트</NavDropdown.Item>
+							<NavDropdown.Item><NavLink to="/pc/lol">LOL</NavLink></NavDropdown.Item>
+							<NavDropdown.Item><NavLink to="/pc/val">발로란트</NavLink></NavDropdown.Item>
 						</NavDropdown>
 						<NavDropdown title="콘솔게임" id="navbarScrollingDropdown">
-							<NavDropdown.Item href="/console/zelda">젤다</NavDropdown.Item>
+							<NavDropdown.Item><NavLink to="/console/zelda">젤다</NavLink></NavDropdown.Item>
 						</NavDropdown>
 						<NavDropdown title="모바일게임" id="navbarScrollingDropdown">
-							<NavDropdown.Item href="/mobile/brawl_stars">브롤스타즈</NavDropdown.Item>
+							<NavDropdown.Item><NavLink to="/mobile/brawl_stars">브롤스타즈</NavLink></NavDropdown.Item>
 						</NavDropdown>
 						<Nav.Link><NavLink to='/team_promotion' style={{ textDecoration: 'none', color: 'inherit' }}>팀 홍보 게시판</NavLink></Nav.Link>
 						<Nav.Link><NavLink to='/request' style={{ textDecoration: 'none', color: 'inherit' }}>요청 게시판</NavLink></Nav.Link>
