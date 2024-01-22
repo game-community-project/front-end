@@ -26,7 +26,7 @@ import OAuth from './pages/OAuth';
 
 function App() {
     return (
-        <BrowserRouter>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
             <TopNav />
             <Routes>
                 <Route path="/" Component={Home} />
