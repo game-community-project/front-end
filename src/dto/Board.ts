@@ -4,9 +4,6 @@ export interface BoardDto {
     postContent: string;
     createdAt: string;
     modifiedAt: string;
-    boardName: string;
-    gameName: string;
-    gameType: string;
     postAuthor: string;
     postImageUrl: string;
     postLike: number;
