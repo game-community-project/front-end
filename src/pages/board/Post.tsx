@@ -133,8 +133,7 @@ const Post: React.FC = () => {
             };
 
             await axios.delete(`http://51.21.48.160:8080/api/posts/${postId}`, config);
-            navigate(`/pc/lol`);
-            window.location.reload();
+            navigate(`/board`);
 
         } catch (error) {
             console.error('에러:', error);
