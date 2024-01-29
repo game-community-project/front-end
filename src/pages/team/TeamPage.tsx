@@ -20,17 +20,17 @@ const TeamInfo: React.FC = () => {
   useEffect(() => {
     const fetchTeamInfo = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/teams/${teamId}`);
+        const response = await axios.get(`https://spartagameclub.shop/api/teams/${teamId}`);
         if (response.status === 200) {
           setTeamInfo(response.data.data);
 
           // adminId를 사용하여 admin의 닉네임을 조회
-          const adminResponse = await axios.get(`http://localhost:8080/api/users/profile/${response.data.data.teamAdminId}`);
+          const adminResponse = await axios.get(`https://spartagameclub.shop/api/users/profile/${response.data.data.teamAdminId}`);
           if (adminResponse.status === 200) {
             setAdminName(adminResponse.data.data.nickname);
           }
 
-          const usersResponse = await axios.get(`http://localhost:8080/api/teams/${teamId}/users`);
+          const usersResponse = await axios.get(`https://spartagameclub.shop/api/teams/${teamId}/users`);
           if (usersResponse.status === 200) {
             setUsers(usersResponse.data.data);
           }
@@ -45,7 +45,7 @@ const TeamInfo: React.FC = () => {
               },
             };
 
-            const isTeamAdminResponse = await axios.get(`http://localhost:8080/api/teams/${teamId}/admin`, config);
+            const isTeamAdminResponse = await axios.get(`https://spartagameclub.shop/api/teams/${teamId}/admin`, config);
             if (isTeamAdminResponse.status === 200) {
               setIsTeamAdmin(isTeamAdminResponse.data);
             }
@@ -78,7 +78,7 @@ const TeamInfo: React.FC = () => {
         },
       };
 
-      const res = await axios.delete(`http://localhost:8080/api/teams/${teamId}`, config);
+      const res = await axios.delete(`https://spartagameclub.shop/api/teams/${teamId}`, config);
 
       if (res.status === 200) {
         alert('팀이 성공적으로 삭제되었습니다.');

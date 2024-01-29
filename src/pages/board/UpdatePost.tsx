@@ -14,7 +14,7 @@ const UpdatePostForm = () => {
     // URL이 변경될 때마다 해당 게시물 데이터를 불러옴
     const fetchPostData = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/posts/${postId}`);
+        const response = await fetch(`https://spartagameclub.shop/api/posts/${postId}`);
         if (response.ok) {
           const postData = await response.json();
 
@@ -75,7 +75,7 @@ const UpdatePostForm = () => {
         return;
       }
 
-      const response = await fetch(`http://localhost:8080/api/posts/${postId}`, {
+      const response = await fetch(`https://spartagameclub.shop/api/posts/${postId}`, {
         method: 'PATCH',
         body: formData,
         headers: {

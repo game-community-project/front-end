@@ -19,7 +19,7 @@ const Guestbook: React.FC = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/users/${userId}`);
+        const response = await axios.get(`https://spartagameclub.shop/api/users/${userId}`);
         setComments(response.data.guestBookList || []);
       } catch (error) {
         console.error('사용자 정보를 가져오는 데 실패했습니다.', error);
@@ -51,7 +51,7 @@ const Guestbook: React.FC = () => {
   const getComments = async (userId: string, page: number) => {
     try {
 
-      const response = await axios.get(`http://localhost:8080/api/users/${userId}/guestbooks?page=${page}&size=10&sortBy=createdAt&isAsc=true`);
+      const response = await axios.get(`https://spartagameclub.shop/api/users/${userId}/guestbooks?page=${page}&size=10&sortBy=createdAt&isAsc=true`);
  
         setComments(response.data.data.content);
         setTotalPages(response.data.totalPages);
@@ -71,7 +71,7 @@ const createComment = async () => {
       return;
     }
 
-    const response = await axios.post(`http://localhost:8080/api/users/${userId}/guestbooks`, { content: newComment },
+    const response = await axios.post(`https://spartagameclub.shop/api/users/${userId}/guestbooks`, { content: newComment },
     {
       headers: {
         'Access': `${accessToken}`,
@@ -102,7 +102,7 @@ const createComment = async () => {
         return;
       }
 
-      const response = await axios.patch(`http://localhost:8080/api/users/${userId}/guestbooks/${commentId}`, { content: updateContent },
+      const response = await axios.patch(`https://spartagameclub.shop/api/users/${userId}/guestbooks/${commentId}`, { content: updateContent },
       {
         headers: {
           'Access': `${accessToken}`,
@@ -131,7 +131,7 @@ const createComment = async () => {
       if (commentId == null) {
         console.error('유효하지 않은 commentId:', commentId);
         return;}
-      await axios.delete(`http://localhost:8080/api/users/${userId}/guestbooks/${commentId}`,
+      await axios.delete(`https://spartagameclub.shop/api/users/${userId}/guestbooks/${commentId}`,
       {
         headers: {
           'Access': `${accessToken}`,

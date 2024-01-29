@@ -16,7 +16,7 @@ const Logout = () => {
         }
 
         // 만료되지 않은 토큰이라면 로그아웃 요청 수행
-        const response = await fetch('http://localhost:8080/api/users/logout', {
+        const response = await fetch('https://spartagameclub.shop/api/users/logout', {
           method: 'DELETE',
           headers: {
             'Access': `${accessToken}`,

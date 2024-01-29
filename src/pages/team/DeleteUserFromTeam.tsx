@@ -11,7 +11,7 @@ const DeleteUserFromTeam: React.FC = () => {
   useEffect(() => {
     const fetchTeamMembers = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/teams/${teamId}/users`);
+        const response = await axios.get(`https://spartagameclub.shop/api/teams/${teamId}/users`);
         if (response.status === 200) {
           setTeamMembers(response.data.data);
         } else {
@@ -42,7 +42,7 @@ const DeleteUserFromTeam: React.FC = () => {
         },
       };
 
-      const response = await axios.get('http://localhost:8080/api/users/profile', config);
+      const response = await axios.get('https://spartagameclub.shop/api/users/profile', config);
       const loggedInUserNickname = response.data.data.nickname;
 
       if (loggedInUserNickname === selectedUser) {
@@ -51,7 +51,7 @@ const DeleteUserFromTeam: React.FC = () => {
         return;
       }
 
-      const deleteResponse = await axios.delete(`http://localhost:8080/api/teams/${teamId}/deleteUser?nickname=${selectedUser}`, config);
+      const deleteResponse = await axios.delete(`https://spartagameclub.shop/api/teams/${teamId}/deleteUser?nickname=${selectedUser}`, config);
       if (deleteResponse.status === 200) {
         console.log('유저 삭제 성공');
         alert('유저 삭제 성공');

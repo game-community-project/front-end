@@ -39,7 +39,7 @@ function UserInfo(props: AdminProps) {
 
   const fetchData = async () => {
     try {
-      const url = `http://localhost:8080/api/admin/users/${nickname}`;
+      const url = `https://spartagameclub.shop/api/admin/users/${nickname}`;
       const resp = await axios.get(url, {
         headers: {
           access: accessToken,

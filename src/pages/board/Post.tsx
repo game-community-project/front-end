@@ -56,7 +56,7 @@ const Post: React.FC = () => {
     const getPost = async (id: string | undefined) => {
 
         try {
-          const res = await axios.get(`http://localhost:8080/api/posts/${postId}`);
+          const res = await axios.get(`https://spartagameclub.shop/api/posts/${postId}`);
           const postData = res.data.data;
       
           if (postData.postImageUrl) {
@@ -115,7 +115,7 @@ const Post: React.FC = () => {
                 },
             };
 
-            const res = await axios.post(`http://localhost:8080/api/posts/${postId}/like?isLike=${isLike}`, {}, config);
+            const res = await axios.post(`https://spartagameclub.shop/api/posts/${postId}/like?isLike=${isLike}`, {}, config);
 
             getPost(postId);
 
@@ -141,7 +141,7 @@ const Post: React.FC = () => {
                 },
             };
 
-            await axios.delete(`http://localhost:8080/api/posts/${postId}`, config);
+            await axios.delete(`https://spartagameclub.shop/api/posts/${postId}`, config);
             navigate(`/board`);
 
         } catch (error) {
@@ -160,7 +160,7 @@ const Post: React.FC = () => {
     const getComments = async (postId: string | undefined, page: number = 1) => {
         try {
             const res = await axios.get(
-                `http://localhost:8080/api/posts/${postId}/comments?page=${page}&size=${commentsPerPage}&sortBy=createdAt&isAsc=true`
+                `https://spartagameclub.shop/api/posts/${postId}/comments?page=${page}&size=${commentsPerPage}&sortBy=createdAt&isAsc=true`
             );
 const formattedComments = res.data.data.content.map((comment: CommentDto) => ({
                 ...comment,
@@ -196,7 +196,7 @@ const formattedComments = res.data.data.content.map((comment: CommentDto) => ({
                 content: comment,
             };
 
-            await axios.post(`http://localhost:8080/api/posts/${postId}/comments`, commentData, config);
+            await axios.post(`https://spartagameclub.shop/api/posts/${postId}/comments`, commentData, config);
 
             getComments(postId);
             setComment('');
@@ -241,7 +241,7 @@ const formattedComments = res.data.data.content.map((comment: CommentDto) => ({
                 content: editedComment,
             };
 
-            await axios.put(`http://localhost:8080/api/posts/${postId}/comments/${editingCommentId}`, editedCommentData, config);
+            await axios.put(`https://spartagameclub.shop/api/posts/${postId}/comments/${editingCommentId}`, editedCommentData, config);
 
             // 편집 후 댓글 갱신
             getComments(postId);
@@ -272,7 +272,7 @@ const formattedComments = res.data.data.content.map((comment: CommentDto) => ({
                 },
             };
 
-            await axios.delete(`http://localhost:8080/api/posts/${postId}/comments/${commentId}`, config);
+            await axios.delete(`https://spartagameclub.shop/api/posts/${postId}/comments/${commentId}`, config);
 
             // 삭제 후 댓글 갱신
             getComments(postId);
@@ -300,7 +300,7 @@ const formattedComments = res.data.data.content.map((comment: CommentDto) => ({
             };
             
             console.log(accessToken);
-            await axios.put(`http://localhost:8080/api/posts/${postId}/comments/${commentId}/accept`, {}, config);
+            await axios.put(`https://spartagameclub.shop/api/posts/${postId}/comments/${commentId}/accept`, {}, config);
             alert('댓글이 채택되었습니다. 해당 게시글은 마감됩니다.')
             getPost(postId);
             
