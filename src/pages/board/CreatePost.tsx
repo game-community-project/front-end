@@ -59,7 +59,7 @@ function CreatePost() {
         formData.append('file', selectedImage);
       }
 
-      const response = fetch(`http://51.21.48.160:8080/api/posts`, {
+      const response = fetch(`https://spartagameclub.shop/api/posts`, {
         method: 'POST',
         body: formData,
         headers: {

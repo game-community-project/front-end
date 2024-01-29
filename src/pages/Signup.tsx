@@ -34,7 +34,7 @@ function Signup() {
     try {
         const { authNumber, ...formDataWithoutAuthNumber } = formData;
         console.log("formData: formData", formData);
-      const response = await fetch(`http://51.21.48.160:8080/api/users/signup`, {
+      const response = await fetch(`https://spartagameclub.shop/api/users/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,7 +66,7 @@ function Signup() {
   // 이메일 발송
   const EmailVerification = async () => {
     try {
-      const response = await fetch(`http://51.21.48.160:8080/api/users/signup/email`, {
+      const response = await fetch(`https://spartagameclub.shop/api/users/signup/email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,7 +89,7 @@ function Signup() {
   const EmailAuthCheck = async () => {
     try {
       console.log("EmailAuthCheck: formData", formData);
-      const response = await fetch(`http://51.21.48.160:8080/api/users/signup/emailauthcheck`, {
+      const response = await fetch(`https://spartagameclub.shop/api/users/signup/emailauthcheck`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

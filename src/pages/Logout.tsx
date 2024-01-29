@@ -16,7 +16,7 @@ const Logout = () => {
         }
 
         // 만료되지 않은 토큰이라면 로그아웃 요청 수행
-        const response = await fetch('http://51.21.48.160:8080/api/users/logout', {
+        const response = await fetch('https://spartagameclub.shop/api/users/logout', {
           method: 'DELETE',
           headers: {
             'Access': `${accessToken}`,
@@ -28,7 +28,7 @@ const Logout = () => {
           localStorage.removeItem('accessToken');
 
           // 로그아웃이 성공하면 리다이렉트 또는 다른 작업 수행
-          window.location.replace('/');
+          window.location.replace('/front-end');
         } else {
           // 로그아웃 실패 시에 대한 처리
           console.error('로그아웃 실패');

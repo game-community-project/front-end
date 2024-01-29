@@ -25,7 +25,7 @@ const ProfileModify: React.FC = () => {
     const fetchUserData = async () => {
       try {
         // 서버의 유저 정보 가져오기 엔드포인트 URL
-        const fetchUserUrl = 'http://51.21.48.160:8080/api/users/profile';
+        const fetchUserUrl = 'https://spartagameclub.shop/api/users/profile';
 
         // Axios를 사용하여 GET 요청 보내기
         const response = await axios.get(fetchUserUrl, {
@@ -54,7 +54,7 @@ const ProfileModify: React.FC = () => {
     try {
       // profile url과 introduction을 묶어서 POST 요청 보내기
       const userPayload = { introduction, profile_url };
-      const userResponse = await axios.patch('http://51.21.48.160:8080/api/users/profile', userPayload, {
+      const userResponse = await axios.patch('https://spartagameclub.shop/api/users/profile', userPayload, {
         headers: { access: accessToken, refresh: refreshToken, },
       }
       );
@@ -65,7 +65,7 @@ const ProfileModify: React.FC = () => {
         if (nowPassword !== '' && newPassword !== '' && checkPassword !== '') {
           // password와 checkPassword를 묶어서 따로 POST 요청 보내기
           const passwordPayload = { nowPassword, newPassword, checkPassword };
-          const passwordResponse = await axios.put('http://51.21.48.160:8080/api/users/password', passwordPayload, {
+          const passwordResponse = await axios.put('https://spartagameclub.shop/api/users/password', passwordPayload, {
             headers: { access: accessToken, refresh: refreshToken, },
           }
           );
