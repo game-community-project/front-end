@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { PostDto } from '../../dto/Post';
+import { format } from 'date-fns';
 
 import likeImage from '../../images/like_image.png';
 import unlikeImage from '../../images/unlike_image.png';
@@ -66,12 +67,18 @@ const Post: React.FC = () => {
             const imageUrl = `https://${config.bucketName}.s3.amazonaws.com/${objectKey}`;
             
             setPost({
-              ...postData,
-              postImageUrl: imageUrl, // 이미지 URL 추가
+                ...postData,
+                postImageUrl: imageUrl,
+                createdAt: format(new Date(postData.createdAt), 'yyyy-MM-dd HH:mm:ss'),
+                modifiedAt: format(new Date(postData.modifiedAt), 'yyyy-MM-dd HH:mm:ss'),
             });
-          } else {
-            setPost(postData);
-          }
+        } else {
+            setPost({
+                ...postData,
+                createdAt: format(new Date(postData.createdAt), 'yyyy-MM-dd HH:mm:ss'),
+                modifiedAt: format(new Date(postData.modifiedAt), 'yyyy-MM-dd HH:mm:ss'),
+            });
+        }
       
           setLikeCount(postData.postLike);
           setUnlikeCount(postData.postUnlike);
@@ -97,7 +104,7 @@ const Post: React.FC = () => {
             if (!accessToken) {
                 console.error('액세스 토큰이 없습니다.');
                 alert('로그인하고 이용해주세요')
-                navigate("/");
+                navigate("/login");
                 return;
             }
 
@@ -110,7 +117,7 @@ const Post: React.FC = () => {
 
             const res = await axios.post(`http://localhost:8080/api/posts/${postId}/like?isLike=${isLike}`, {}, config);
 
-            window.location.reload();
+            getPost(postId);
 
         } catch (error) {
             console.error('에러:', error);
@@ -123,7 +130,7 @@ const Post: React.FC = () => {
             if (!accessToken) {
                 console.error('액세스 토큰이 없습니다.');
                 alert('로그인하고 이용해주세요');
-                navigate("/");
+                navigate(`/login`);
                 return;
             }
 
@@ -155,7 +162,13 @@ const Post: React.FC = () => {
             const res = await axios.get(
                 `http://localhost:8080/api/posts/${postId}/comments?page=${page}&size=${commentsPerPage}&sortBy=createdAt&isAsc=true`
             );
-            setComments(res.data.data.content);
+const formattedComments = res.data.data.content.map((comment: CommentDto) => ({
+                ...comment,
+                createdAt: format(new Date(comment.createdAt), 'yyyy-MM-dd HH:mm:ss'),
+                modifiedAt: format(new Date(comment.modifiedAt), 'yyyy-MM-dd HH:mm:ss'),
+            }));
+
+            setComments(formattedComments);
             setTotalPages(res.data.data.totalPages);
         } catch (error) {
             console.error('댓글을 가져오는 중 에러 발생:', error);
@@ -168,7 +181,7 @@ const Post: React.FC = () => {
             if (!accessToken) {
                 console.error('액세스 토큰이 없습니다.');
                 alert('댓글을 작성하려면 로그인이 필요합니다.');
-                navigate('/');
+                navigate(`/login`);
                 return;
             }
 
@@ -213,7 +226,7 @@ const Post: React.FC = () => {
             if (!accessToken) {
                 console.error('액세스 토큰이 없습니다.');
                 alert('댓글을 편집하려면 로그인이 필요합니다.');
-                navigate('/');
+                navigate(`/login`);
                 return;
             }
 
@@ -248,7 +261,7 @@ const Post: React.FC = () => {
             if (!accessToken) {
                 console.error('액세스 토큰이 없습니다.');
                 alert('댓글을 삭제하려면 로그인이 필요합니다.');
-                navigate('/');
+                navigate('/login');
                 return;
             }
 
@@ -275,7 +288,7 @@ const Post: React.FC = () => {
             if (!accessToken) {
                 console.error('액세스 토큰이 없습니다.');
                 alert('댓글을 채택하려면 로그인이 필요합니다.');
-                navigate('/');
+                navigate('/login');
                 return;
             }
 
@@ -287,10 +300,10 @@ const Post: React.FC = () => {
             };
             
             console.log(accessToken);
-            await axios.put(`http://localhost:8080/api/posts/${postId}/comments/${commentId}/accept`, config);
-
-            // 채택 후 댓글 갱신
-            getComments(postId);
+            await axios.put(`http://localhost:8080/api/posts/${postId}/comments/${commentId}/accept`, {}, config);
+            alert('댓글이 채택되었습니다. 해당 게시글은 마감됩니다.')
+            getPost(postId);
+            
         } catch (error) {
             console.error(error);
         }
@@ -316,7 +329,6 @@ const Post: React.FC = () => {
                         <hr />
                         <p className="mb-2 text-muted">
                             {`${post.postAuthor} | 생성시간: ${post.createdAt} | 수정시간: ${post.modifiedAt}`}
-                            <button onClick={handleGoToGuestbook} style={{ float: 'right' }}>방명록</button>
                         </p>
                         <hr />
                         <p>{post.postContent}</p>
@@ -347,6 +359,9 @@ const Post: React.FC = () => {
                         <span className="post-stat">{post.postUnlike}</span>
                     </div>
                     <div className="edit-delete-buttons">
+                        <button className="btn btn-primary" onClick={handleGoToGuestbook}
+                        >방명록
+                        </button>
                         <Link to={`/modify_post/${postId}`} className="btn btn-edit">
                             수정
                         </Link>
