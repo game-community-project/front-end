@@ -287,7 +287,7 @@ const Post: React.FC = () => {
             };
             
             console.log(accessToken);
-            await axios.post(`http://localhost:8080/api/posts/${postId}/comments/${commentId}/accept`, config);
+            await axios.put(`http://localhost:8080/api/posts/${postId}/comments/${commentId}/accept`, config);
 
             // 채택 후 댓글 갱신
             getComments(postId);
