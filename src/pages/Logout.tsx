@@ -28,7 +28,7 @@ const Logout = () => {
           localStorage.removeItem('accessToken');
 
           // 로그아웃이 성공하면 리다이렉트 또는 다른 작업 수행
-          window.location.replace('/');
+          window.location.replace('/front-end');
         } else {
           // 로그아웃 실패 시에 대한 처리
           console.error('로그아웃 실패');
