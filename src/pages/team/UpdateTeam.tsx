@@ -7,7 +7,6 @@ const UpdateTeam: React.FC = () => {
   const { teamId = '' } = useParams();
   const [teamName, setTeamName] = useState('');
   const [teamIntroduction, setTeamIntroduction] = useState('');
-  const [gameName, setGameName] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,11 +14,9 @@ const UpdateTeam: React.FC = () => {
       try {
         const response = await axios.get(`https://spartagameclub.shop/api/teams/${teamId}`);
         if (response.status === 200) {
-          const { teamName, teamIntroduction ,gameName} = response.data.data;
-          console.log(response);
+          const { teamName, teamIntroduction} = response.data.data;
           setTeamName(teamName);
           setTeamIntroduction(teamIntroduction);
-          setGameName(gameName);
         } else {
           console.error('팀 정보를 불러오는 데 실패했습니다.');
         }
@@ -51,7 +48,6 @@ const UpdateTeam: React.FC = () => {
       const data = {
         teamName: teamName,
         teamIntroduction: teamIntroduction,
-        gameName: gameName
       };
 
       const response = await axios.patch(`https://spartagameclub.shop/api/teams/${teamId}`, data, config);

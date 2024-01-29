@@ -1,15 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import {TeamDto} from '../../dto/Team';
-import {Link, useNavigate} from 'react-router-dom';
+import { TeamDto } from '../../dto/Team';
+import { Link, useNavigate } from 'react-router-dom';
 
 import './Team.css';
 
-interface TeamProps {
-  gameName: string;
-}
-
-const Team: React.FC<TeamProps> = ({gameName}) => {
+const Team: React.FC = () => {
   const navigate = useNavigate();
   const [teams, setTeams] = useState<TeamDto[] | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,23 +15,24 @@ const Team: React.FC<TeamProps> = ({gameName}) => {
 
   useEffect(() => {
     if (isLoggedIn()) {
-      getUserTeams(gameName, currentPage);
+      getUserTeams(currentPage);
     } else {
-      getTeams(gameName, currentPage);
+      getTeams(currentPage);
     }
-  }, [currentPage, gameName]);
+  }, [currentPage]);
 
-  const getTeams = async (gameName: string, page: number) => {
+  const getTeams = async (page: number) => {
     try {
-      const res = await axios.get(`https://spartagameclub.shop/api/teams?page=${page}&size=10&sortBy=teamName&isAsc=true&gameName=${gameName}`);
+      const res = await axios.get(`https://spartagameclub.shop/api/teams?page=${page}&size=10&sortBy=teamName&isAsc=true`);
       setTeams(res.data.data.content);
       setTotalPages(res.data.data.totalPages);
+      console.log(res);
     } catch (error) {
-      console.error('Error fetching teams:', error);
+      console.error('팀 목록을 불러오는데 실패했습니다.', error);
     }
   };
 
-  const getUserTeams = async (gameName: string, page: number) => {
+  const getUserTeams = async (page: number) => {
     try {
       const accessToken = localStorage.getItem('accessToken');
       if (!accessToken) {
@@ -52,12 +49,12 @@ const Team: React.FC<TeamProps> = ({gameName}) => {
         },
       };
 
-      const res = await axios.get(`https://spartagameclub.shop/api/teams/users?page=${page}&size=10&sortBy=Team&isAsc=true&gameName=${gameName}`, config);
+      const res = await axios.get(`https://spartagameclub.shop/api/teams/users?page=${page}&size=10&sortBy=Team&isAsc=true`, config);
       setUserTeams(res.data.data.content);
       setTotalPages(res.data.data.totalPages);
 
     } catch (error) {
-      console.error('에러:', error);
+      console.error('팀 목록을 불러오는데 실패했습니다.', error);
     }
   };
 
@@ -71,20 +68,32 @@ const Team: React.FC<TeamProps> = ({gameName}) => {
     setCurrentPage(newPage);
   };
 
-
-  const createNewTeam = async () => {
+  const leaveTeam = async (teamId: number) => {
     try {
-      const res = await axios.post('https://spartagameclub.shop/api/teams', {
-        teamName: newTeamName,
-      });
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        console.error('액세스 토큰이 없습니다.');
+        alert('로그인하고 이용해주세요');
+        navigate("/");
+        return;
+      }
 
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access': `${accessToken}`,
+        },
+      };
 
-      navigate(`/team/${res.data.data.teamId}`);
+      const res = await axios.delete(`https://spartagameclub.shop/api/teams/${teamId}/leave`, config);
+      if (res.status === 200) {
+        getUserTeams(currentPage);
+        alert("팀 탈퇴에 성공하셨습니다.")
+      }
     } catch (error) {
-      console.error('Error creating new team:', error);
+      console.error('Error leaving team:', error);
     }
   };
-
 
   return (
       <div className="container mt-4">
@@ -99,12 +108,13 @@ const Team: React.FC<TeamProps> = ({gameName}) => {
                         <h2 className="team-name">{team.teamName}</h2>
                       </Link>
                       <p className="team-introduction">{team.teamIntroduction}</p>
+                      <button onClick={() => leaveTeam(team.teamId)} className="btn btn-danger">Leave Team</button>
                     </li>
                 ))}
               </ul>
 
               <div className="pagination mt-3">
-                {Array.from({length: totalPages}, (_, index) => index + 1).map((page) => (
+                {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
                     <span
                         key={page}
                         className={`page-item ${page === currentPage ? "active" : ""}`}
@@ -129,7 +139,7 @@ const Team: React.FC<TeamProps> = ({gameName}) => {
               </ul>
 
               <div className="pagination mt-3">
-                {Array.from({length: totalPages}, (_, index) => index + 1).map((page) => (
+                {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
                     <span
                         key={page}
                         className={`page-item ${page === currentPage ? "active" : ""}`}

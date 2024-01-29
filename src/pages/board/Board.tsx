@@ -87,7 +87,7 @@ const Board: React.FC = () => {
         </Col>
         <Col md={4}>
           <div>
-            <h5>팀</h5>
+            <Team/>
           </div>
         </Col>
       </Row>

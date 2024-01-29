@@ -6,7 +6,7 @@ const CreateTeam: React.FC = () => {
   const navigate = useNavigate();
   const [teamName, setTeamName] = useState('');
   const [teamIntroduction, setTeamIntroduction] = useState('');
-  const [gameName, setGameName] = useState('');
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = e.target;
@@ -16,9 +16,6 @@ const CreateTeam: React.FC = () => {
         break;
       case 'teamIntroduction':
         setTeamIntroduction(value);
-        break;
-      case 'gameName':
-        setGameName(value);
         break;
       default:
         break;
@@ -42,7 +39,6 @@ const CreateTeam: React.FC = () => {
           {
             teamName: teamName,
             teamIntroduction: teamIntroduction,
-            gameName: gameName,
           },
           {
             headers: {
@@ -100,24 +96,6 @@ const CreateTeam: React.FC = () => {
               placeholder="팀 소개를 입력해주세요"
           />
 
-          <label htmlFor="gameName" className="form-label mb-2">
-            게임 이름
-          </label>
-          <select
-              className="form-select mb-3"
-              id="gameName"
-              name="gameName"
-              onChange={(e) => setGameName(e.target.value)}
-          >
-            <option value="">
-              게임 선택
-            </option>
-            <option value="LEAGUE_OF_LEGEND">리그오브레전드</option>
-            <option value="VALORANT">발로란트</option>
-            <option value="THE_LEGEND_OF_ZELDA_TEARS_OF_THE_KINGDOM">젤다의 전설 티어스 오브 더 킹덤</option>
-            <option value="BRAWL_STARS">브롤스타즈</option>
-            <option value="EMPTY_NAME">없음</option>
-          </select>
         </div>
 
         <div className="mb-3 d-flex justify-content-center">

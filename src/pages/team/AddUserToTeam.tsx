@@ -48,17 +48,14 @@ const AddUserToTeam: React.FC = () => {
 
       const response = await axios.post(`https://spartagameclub.shop/api/teams/${teamId}/addUser?nickname=${nickname}`, data, config);
       if (response.status === 200) {
-        console.log('유저 추가 성공');
         alert('유저 추가 성공');
         window.location.reload()
 
       } else {
-        console.error('유저 추가 실패');
         alert('유저 추가 실패');
       }
     } catch (error) {
-      console.error('유저 추가 도중 에러 발생:', error);
-      alert('유저 추가 도중 에러 발생');
+      alert('해당 유저는 존재하지 않습니다.');
     }
   };
 
