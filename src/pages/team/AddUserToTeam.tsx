@@ -49,7 +49,7 @@ const AddUserToTeam: React.FC = () => {
       const response = await axios.post(`https://spartagameclub.shop/api/teams/${teamId}/addUser?nickname=${nickname}`, data, config);
       if (response.status === 200) {
         alert('유저 추가 성공');
-        window.location.reload()
+        navigate(`/teams/${teamId}`)
 
       } else {
         alert('유저 추가 실패');
