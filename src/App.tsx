@@ -1,7 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from './pages/Home';
 import TopNav from './layout/TopNav';
 import Board from './pages/board/Board';
 import Post from './pages/board/Post';
@@ -29,8 +28,7 @@ function App() {
         <BrowserRouter basename={process.env.PUBLIC_URL}>
             <TopNav />
             <Routes>
-                <Route path="/" Component={Home} />
-                <Route path="/board" Component={Board} />
+                <Route path="/" Component={Board} />
                 <Route path="/post/:postId" Component={Post} />
                 <Route path="/write_post" Component={CreatePost} /> 
                 <Route path="/create_team" Component={CreateTeam} />

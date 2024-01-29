@@ -47,16 +47,6 @@ function TopNav() {
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="mr-auto my-2 my-lg-0" navbarScroll>
-            {/* 수정된 스타일을 적용한 "홈" 및 "게시판" 링크 */}
-            <div className="d-flex">
-              <Nav.Link>
-                <NavLink to='/' style={{ textDecoration: 'none', color: 'inherit' }}>홈</NavLink>
-              </Nav.Link>
-              <Nav.Link>
-                <NavLink to='/board' style={{ textDecoration: 'none', color: 'inherit' }}>게시판</NavLink>
-              </Nav.Link>
-            </div>
-
             {isAdmin && <Nav.Link><NavLink to='/admin/user_list' style={{ textDecoration: 'none', color: 'inherit' }}>관리자</NavLink></Nav.Link>}
           </Nav>
           <Form className="d-flex">

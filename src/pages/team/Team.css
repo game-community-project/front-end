@@ -15,6 +15,11 @@
   margin-bottom: 5px;
 }
 
+.team-link {
+  color: black;
+  text-decoration: none;
+}
+
 .team-introduction {
   color: #555;
 }

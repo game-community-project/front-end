@@ -108,7 +108,7 @@ const Team: React.FC = () => {
                         <h2 className="team-name">{team.teamName}</h2>
                       </Link>
                       <p className="team-introduction">{team.teamIntroduction}</p>
-                      <button onClick={() => leaveTeam(team.teamId)} className="btn btn-danger">Leave Team</button>
+                      <button onClick={() => leaveTeam(team.teamId)} className="btn btn-danger">팀 탈퇴</button>
                     </li>
                 ))}
               </ul>
