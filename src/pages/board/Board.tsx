@@ -18,7 +18,7 @@ const Board: React.FC = () => {
       try {
         setLoading(true);
         const res = await axios.get(
-          `https://spartagameclub.shop/api/posts?type=&page=${currentPage}&size=10&sortKey=createdAt&isAsc=false`
+          `http://localhost:8080/api/posts?type=&page=${currentPage}&size=10&sortKey=createdAt&isAsc=false`
         );
         setBoard((prevBoard) => [...prevBoard, ...res.data.data.content]);
         setTotalPages(res.data.data.totalPages);
@@ -53,30 +53,35 @@ const Board: React.FC = () => {
       <Row>
         <Col md={8}>
           <div className="d-flex justify-content-between align-items-center mb-3">
-            <h2>게시판</h2>
+            <h2>팀원 찾기</h2>
             <Link to="/write_post" className="btn btn-primary">
               글 작성
             </Link>
           </div>
           {board.map((boardItem: BoardDto) => (
             <Link to={`/post/${boardItem.postId}`} key={boardItem.postId} style={{ textDecoration: 'none', color: 'inherit' }}>
-            <Card className="mb-3">
-              <Card.Body>
-                <Card.Title>{boardItem.postTitle}</Card.Title>
-                <hr></hr>
-                <div className="d-flex justify-content-between align-items-center">
-                  <div>
-                    {/* 작성자 */}
-                    <Card.Subtitle className="mb-2 text-muted">{boardItem.postAuthor}</Card.Subtitle>
+              <Card className="mb-3">
+                <Card.Body>
+                  <Card.Title>
+                    {boardItem.postTitle}
+                    <span className={`status-indicator ${boardItem.close ? 'closed' : 'open'}`}>
+                      {boardItem.close ? 'close' : 'open'}
+                    </span>
+                  </Card.Title>
+                  <hr></hr>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div>
+                      {/* 작성자 */}
+                      <Card.Subtitle className="mb-2 text-muted">{boardItem.postAuthor}</Card.Subtitle>
+                    </div>
+                    <div>
+                      {/* 작성시간 */}
+                      <Card.Subtitle className="mb-2 text-muted">
+                        {new Date(boardItem.createdAt).toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                      </Card.Subtitle>
+                    </div>
                   </div>
-                  <div>
-                    {/* 작성시간 */}
-                    <Card.Subtitle className="mb-2 text-muted">
-                      {new Date(boardItem.createdAt).toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-                    </Card.Subtitle>
-                  </div>
-                </div>
-                <hr></hr>
+                  <hr></hr>
                   <Card.Text>{boardItem.postContent}</Card.Text>
                 </Card.Body>
               </Card>

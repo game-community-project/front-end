@@ -27,7 +27,7 @@ const Team: React.FC<TeamProps> = ({gameName}) => {
 
   const getTeams = async (gameName: string, page: number) => {
     try {
-      const res = await axios.get(`https://spartagameclub.shop/api/teams?page=${page}&size=10&sortBy=teamName&isAsc=true&gameName=${gameName}`);
+      const res = await axios.get(`http://localhost:8080/api/teams?page=${page}&size=10&sortBy=teamName&isAsc=true&gameName=${gameName}`);
       setTeams(res.data.data.content);
       setTotalPages(res.data.data.totalPages);
     } catch (error) {
@@ -52,7 +52,7 @@ const Team: React.FC<TeamProps> = ({gameName}) => {
         },
       };
 
-      const res = await axios.get(`https://spartagameclub.shop/api/teams/users?page=${page}&size=10&sortBy=Team&isAsc=true&gameName=${gameName}`, config);
+      const res = await axios.get(`http://localhost:8080/api/teams/users?page=${page}&size=10&sortBy=Team&isAsc=true&gameName=${gameName}`, config);
       setUserTeams(res.data.data.content);
       setTotalPages(res.data.data.totalPages);
 
@@ -74,7 +74,7 @@ const Team: React.FC<TeamProps> = ({gameName}) => {
 
   const createNewTeam = async () => {
     try {
-      const res = await axios.post('https://spartagameclub.shop/api/teams', {
+      const res = await axios.post('http://localhost:8080/api/teams', {
         teamName: newTeamName,
       });
 

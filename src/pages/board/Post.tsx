@@ -20,6 +20,7 @@ interface CommentDto {
     commentId: number;
     author: string;
     content: string;
+    accpet: boolean;
     createdAt: string;
     modifiedAt: string;
 }
@@ -44,6 +45,7 @@ const Post: React.FC = () => {
     const [commentsPerPage] = useState<number>(10);
     const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
     const [editedComment, setEditedComment] = useState<string>('');
+    const [acceptCommentId, setAcceptCommentId] = useState<number | null>(null);
 
     useEffect(() => {
         getPost(postId);
@@ -53,7 +55,7 @@ const Post: React.FC = () => {
     const getPost = async (id: string | undefined) => {
 
         try {
-          const res = await axios.get(`https://spartagameclub.shop/api/posts/${postId}`);
+          const res = await axios.get(`http://localhost:8080/api/posts/${postId}`);
           const postData = res.data.data;
       
           if (postData.postImageUrl) {
@@ -106,7 +108,7 @@ const Post: React.FC = () => {
                 },
             };
 
-            const res = await axios.post(`https://spartagameclub.shop/api/posts/${postId}/like?isLike=${isLike}`, {}, config);
+            const res = await axios.post(`http://localhost:8080/api/posts/${postId}/like?isLike=${isLike}`, {}, config);
 
             window.location.reload();
 
@@ -132,7 +134,7 @@ const Post: React.FC = () => {
                 },
             };
 
-            await axios.delete(`https://spartagameclub.shop/api/posts/${postId}`, config);
+            await axios.delete(`http://localhost:8080/api/posts/${postId}`, config);
             navigate(`/board`);
 
         } catch (error) {
@@ -151,7 +153,7 @@ const Post: React.FC = () => {
     const getComments = async (postId: string | undefined, page: number = 1) => {
         try {
             const res = await axios.get(
-                `https://spartagameclub.shop/api/posts/${postId}/comments?page=${page}&size=${commentsPerPage}&sortBy=createdAt&isAsc=true`
+                `http://localhost:8080/api/posts/${postId}/comments?page=${page}&size=${commentsPerPage}&sortBy=createdAt&isAsc=true`
             );
             setComments(res.data.data.content);
             setTotalPages(res.data.data.totalPages);
@@ -181,7 +183,7 @@ const Post: React.FC = () => {
                 content: comment,
             };
 
-            await axios.post(`https://spartagameclub.shop/api/posts/${postId}/comments`, commentData, config);
+            await axios.post(`http://localhost:8080/api/posts/${postId}/comments`, commentData, config);
 
             getComments(postId);
             setComment('');
@@ -226,7 +228,7 @@ const Post: React.FC = () => {
                 content: editedComment,
             };
 
-            await axios.put(`https://spartagameclub.shop/api/posts/${postId}/comments/${editingCommentId}`, editedCommentData, config);
+            await axios.put(`http://localhost:8080/api/posts/${postId}/comments/${editingCommentId}`, editedCommentData, config);
 
             // 편집 후 댓글 갱신
             getComments(postId);
@@ -257,12 +259,40 @@ const Post: React.FC = () => {
                 },
             };
 
-            await axios.delete(`https://spartagameclub.shop/api/posts/${postId}/comments/${commentId}`, config);
+            await axios.delete(`http://localhost:8080/api/posts/${postId}/comments/${commentId}`, config);
 
             // 삭제 후 댓글 갱신
             getComments(postId);
         } catch (error) {
             console.error('댓글을 삭제하는 중 에러 발생:', error);
+        }
+    };
+
+    const handleAcceptComment = async (commentId: number) => {
+
+        try {
+            const accessToken = localStorage.getItem('accessToken');
+            if (!accessToken) {
+                console.error('액세스 토큰이 없습니다.');
+                alert('댓글을 채택하려면 로그인이 필요합니다.');
+                navigate('/');
+                return;
+            }
+
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access': `${accessToken}`,
+                },
+            };
+            
+            console.log(accessToken);
+            await axios.post(`http://localhost:8080/api/posts/${postId}/comments/${commentId}/accept`, config);
+
+            // 채택 후 댓글 갱신
+            getComments(postId);
+        } catch (error) {
+            console.error(error);
         }
     };
 
@@ -277,7 +307,12 @@ const Post: React.FC = () => {
             {post && (
                 <div className="post-container">
                     <div className="post-content">
-                        <h2 className="post-header">{post.postTitle}</h2>
+                        <h2 className="post-header">
+                            {post.postTitle}
+                            <span className={`status-indicator ${post.close ? 'closed' : 'open'}`}>
+                                {post.close ? 'close' : 'open'}
+                            </span>
+                        </h2>
                         <hr />
                         <p className="mb-2 text-muted">
                             {`${post.postAuthor} | 생성시간: ${post.createdAt} | 수정시간: ${post.modifiedAt}`}
@@ -337,6 +372,9 @@ const Post: React.FC = () => {
                         <p>
                             {comment.author} | 작성시간: {comment.createdAt} | 수정시간: {comment.modifiedAt}
                             <div className="comment-actions">
+                                <button className="btn-adopt" onClick={() => handleAcceptComment(comment.commentId)}>
+                                    채택
+                                </button>
                                 <span className="spacer" />
                                 {editingCommentId !== comment.commentId ? (
                                     <>

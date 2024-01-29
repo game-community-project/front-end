@@ -38,7 +38,7 @@ const CreateTeam: React.FC = () => {
       }
 
       const response = await axios.post(
-          'https://spartagameclub.shop/api/teams',
+          'http://localhost:8080/api/teams',
           {
             teamName: teamName,
             teamIntroduction: teamIntroduction,

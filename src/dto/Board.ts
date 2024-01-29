@@ -9,4 +9,5 @@ export interface BoardDto {
     postLike: number;
     postUnlike: number;
     report: number;
+    close: boolean;
   }

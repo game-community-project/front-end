@@ -13,7 +13,7 @@ function UserList() {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const url = `https://spartagameclub.shop/api/admin/users`;
+				const url = `http://localhost:8080/api/admin/users`;
 				const resp = await axios.get(url, {
 					headers: {
 						access: accessToken,
