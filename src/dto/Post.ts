@@ -10,4 +10,5 @@ export interface PostDto {
     postUnlike: number;
     report: number;
     userId: number;
+    close: boolean;
   }
