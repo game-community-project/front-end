@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 function OAuth() {
 
-	
 	const navigate = useNavigate();
 
 	useEffect(() => {

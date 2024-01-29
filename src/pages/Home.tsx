@@ -6,8 +6,28 @@ import img3 from '../images/game_img3.jpg'
 import img4 from '../images/game_img4.jpg'
 import img5 from '../images/game_img5.jpg'
 import img6 from '../images/game_img6.jpg'
+import { useNavigate } from "react-router-dom";
 
 function Home() {
+
+	const navigate = useNavigate();
+
+	useEffect(() => {
+			
+		const access = new URL(window.location.href).searchParams.get('access');
+		const refresh = new URL(window.location.href).searchParams.get('refresh');
+	
+		if( access == null || refresh == null ) {
+			return;
+		}
+
+		localStorage.setItem('accessToken', access?access:'' );
+		localStorage.setItem('refreshToken', refresh?refresh:'' );
+	
+		navigate('/');
+        window.location.reload();
+	}, []);
+
 	return (
 		<div>
 			<MainGrid />
