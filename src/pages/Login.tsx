@@ -25,7 +25,7 @@ function Login() {
     try {
       console.log('formData:', formData);
 
-      const response = await fetch(`http://51.21.48.160:8080/api/users/login`, {
+      const response = await fetch(`https://spartagameclub.shop/api/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
