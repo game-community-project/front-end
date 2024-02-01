@@ -17,7 +17,6 @@
 
 .comment {
   width: 100%; /* Take up the full width */
-  max-width: 600px; /* Adjust the maximum width as needed */
   /* Add other comment styles as needed */
   margin-bottom: 10px;
   display: flex;

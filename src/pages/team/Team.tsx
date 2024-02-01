@@ -10,7 +10,6 @@ const Team: React.FC = () => {
   const [teams, setTeams] = useState<TeamDto[] | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [newTeamName, setNewTeamName] = useState('');
   const [userTeams, setUserTeams] = useState<TeamDto[] | null>(null);
 
   useEffect(() => {
