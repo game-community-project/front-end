@@ -1,14 +1,15 @@
 /* Comment.css */
 
-
-.comments-container{
-  padding: 10px;
+.comments-container {
+  margin-top: 20px;
 }
+
 .comment {
   border: 1px solid #ccc;
   padding: 15px;
   margin-bottom: 15px;
-  width: 80%;
+  width: 1800px;
+  max-width: 1800px;
   flex-direction: column;
 
 }
@@ -20,36 +21,23 @@
 .comment textarea {
   margin-top: 10px;
 }
-
+.comment-button{
+  width: 33%;
+}
 
 .reply {
   position: relative;
 }
 
-
-
-.comment {
-  margin-bottom: 20px;
+.reply::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -15px; /* 살짝 부모 댓글 옆으로 삐져나오도록 설정 */
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 8px 0 8px 12px;
+  border-color: transparent transparent transparent #007bff; /* 화살표 색상 */
+  transform: translateY(-50%);
 }
-
-.child-comment {
-  margin-left: 20px;
-}
-
-.comment-button {
-  margin-bottom: 3px;
-}
-
-
-
-.edit-button, .delete-button {
-  margin-right: 5px;
-}
-.comment-reply-textarea{
-  margin-bottom: 5px;
-}
-.comment-reply-submit{
-  margin-bottom: 5px;
-}
-
-

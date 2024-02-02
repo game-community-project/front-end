@@ -50,7 +50,7 @@ const Post: React.FC = () => {
   const getPost = async (id: string | undefined) => {
 
     try {
-      const res = await axios.get(`https://spartagameclub.shop/api/posts/${postId}`);
+      const res = await axios.get(`http://localhost:8080/api/posts/${postId}`);
       const postData = res.data.data;
 
       if (postData.postImageUrl) {
@@ -145,7 +145,7 @@ const Post: React.FC = () => {
   const getComments = async (postId: string | undefined, page: number = 1) => {
     try {
       const res = await axios.get(
-          `https://spartagameclub.shop/api/posts/${postId}/comments?page=${page}&size=${commentsPerPage}&sortBy=createdAt&isAsc=true`
+          `http://localhost:8080/api/posts/${postId}/comments?page=${page}&size=${commentsPerPage}&sortBy=createdAt&isAsc=true`
       );
       const formattedComments = res.data.data.content.map((comment: CommentDto) => ({
         ...comment,
