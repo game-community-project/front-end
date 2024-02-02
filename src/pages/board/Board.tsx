@@ -18,7 +18,7 @@ const Board: React.FC = () => {
       try {
         setLoading(true);
         const res = await axios.get(
-          `http://localhost:8080/api/posts?type=&page=${currentPage}&size=10&sortKey=createdAt&isAsc=false`
+          `https://spartagameclub.shop/api/posts?type=&page=${currentPage}&size=10&sortKey=createdAt&isAsc=false`
         );
         setBoard((prevBoard) => [...prevBoard, ...res.data.data.content]);
         setTotalPages(res.data.data.totalPages);
