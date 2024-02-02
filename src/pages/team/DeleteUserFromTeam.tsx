@@ -31,7 +31,7 @@ const DeleteUserFromTeam: React.FC = () => {
       if (!accessToken) {
         console.error('액세스 토큰이 없습니다.');
         alert('로그인하고 이용해주세요');
-        navigate('/');
+        navigate('/login');
         return;
       }
 
@@ -61,6 +61,7 @@ const DeleteUserFromTeam: React.FC = () => {
 
         // 선택된 사용자를 초기화하여 드롭다운 값을 재설정합니다.
         setSelectedUser(null);
+        navigate(`/teams/${teamId}`)
       } else {
         console.error('유저 삭제 실패');
         alert('유저 삭제 실패');

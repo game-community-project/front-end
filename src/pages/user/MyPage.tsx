@@ -88,7 +88,6 @@ const MyPage: React.FC = () => {
         <p>Loading...</p>
       )}
     <Button variant="warning" onClick={goToProfileModify}>수정</Button>
-    <button onClick={handleGoToGuestbook}>방명록</button>
     </div>
   );
 };

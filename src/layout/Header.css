@@ -1,4 +1,4 @@
-.custom-header {
+ .custom-header {
   display: inline-block;
   padding: 23px;
   background-color: red;
@@ -17,4 +17,8 @@
     color: white;
     font-weight: bold;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 1.5);
+  }
+
+  .cursor-pointer {
+    cursor: pointer;
   }
