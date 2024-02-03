@@ -16,9 +16,10 @@ interface CommentDto {
 interface Props {
   comments: CommentDto[];
   postId?: string;
+  getComments: (postId: string | undefined) => void;
 }
 
-const Comment: React.FC<Props> = ({ comments, postId }) => {
+const Comment: React.FC<Props> = ({ comments, postId,getComments }) => {
   const [isReplying, setIsReplying] = useState<{ [key: number]: boolean }>({});
   const [replyContent, setReplyContent] = useState<{ [key: number]: string }>({});
   const [editCommentId, setEditCommentId] = useState<number | null>(null);
@@ -74,7 +75,8 @@ const Comment: React.FC<Props> = ({ comments, postId }) => {
       }
 
       console.log(`댓글 ${commentId}에 대한 답글이 성공적으로 생성되었습니다.`);
-      window.location.reload();
+      alert("대댓글 생성 성공")
+      getComments(postId);
 
       setIsReplying({ ...isReplying, [commentId]: false });
       setReplyContent({ ...replyContent, [commentId]: '' });
@@ -116,7 +118,7 @@ const Comment: React.FC<Props> = ({ comments, postId }) => {
 
       console.log(`댓글 ${commentId}가 성공적으로 수정되었습니다.`);
       alert("댓글이 성공적으로 수정되었습니다.");
-      window.location.reload();
+      getComments(postId);
 
     } catch (error) {
       console.error('댓글 수정 오류:', error);
@@ -150,7 +152,7 @@ const Comment: React.FC<Props> = ({ comments, postId }) => {
 
       console.log(`댓글 ${commentId}가 성공적으로 삭제되었습니다.`);
       alert("댓글이 성공적으로 삭제되었습니다.")
-      window.location.reload();
+      getComments(postId);
 
     } catch (error) {
       console.error('댓글 삭제 오류:', error);
@@ -213,7 +215,7 @@ const Comment: React.FC<Props> = ({ comments, postId }) => {
               )}
             </div>
         ))}
-        {postId && <AddCommentForm postId={postId} />}
+        {postId && <AddCommentForm postId={postId} getComments={getComments}/>}
       </div>
   );
 };

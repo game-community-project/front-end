@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom';
 
 interface Props {
   postId: string; // 부모 게시물의 ID
+  getComments: (postId: string | undefined) => void;
 }
 
-const AddCommentForm: React.FC<Props> = ({ postId }) => {
+const AddCommentForm: React.FC<Props> = ({ postId ,getComments}) => {
   const [commentContent, setCommentContent] = useState<string>('');
   const navigate = useNavigate();
 
@@ -43,8 +44,7 @@ const AddCommentForm: React.FC<Props> = ({ postId }) => {
       if (response.ok) {
         console.log('댓글 작성 성공');
         alert('댓글 작성 성공');
-        // 작성한 댓글이 표시된 페이지로 이동
-        window.location.reload();
+        getComments(postId);
       } else {
         console.error('댓글 작성 실패');
         alert('댓글 작성 실패');

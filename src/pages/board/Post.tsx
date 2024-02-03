@@ -215,7 +215,8 @@ const Post: React.FC = () => {
                   삭제
                 </button>
               </div>
-              <Comment comments={comments} postId={postId}/>
+              <Comment comments={comments} postId={postId} getComments={getComments} />
+
             </div>
         )}
       </div>
