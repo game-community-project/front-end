@@ -88,6 +88,7 @@ const Team: React.FC = () => {
       if (res.status === 200) {
         getUserTeams(currentPage);
         alert("팀 탈퇴에 성공하셨습니다.")
+        getTeams(currentPage);
       }
     } catch (error) {
       console.error('Error leaving team:', error);
@@ -96,7 +97,7 @@ const Team: React.FC = () => {
 
   return (
       <div className="container mt-4">
-        <h1 className="mb-4">Team List</h1>
+        <h1 className="mb-4">팀 목록</h1>
 
         {isLoggedIn() && userTeams ? (
             <div>
