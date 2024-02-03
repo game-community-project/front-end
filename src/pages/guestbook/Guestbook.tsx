@@ -170,7 +170,7 @@ const createComment = async () => {
 
       {comments &&
         comments.map((comment) => (
-          <div key={comment.id} className="comment">
+          <div key={comment.id} className="gbComment">
             <p>
               <strong>{comment.nickname}</strong> | {comment.content} ({comment.createdAt})
             </p>

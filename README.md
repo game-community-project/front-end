@@ -1,46 +1,67 @@
-# Getting Started with Create React App
+# SPARTA GAMECLUB
+![image](https://github.com/game-community-project/game-community/assets/140589023/e733dd52-7c66-4bf9-8b62-47de32ff7575)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 프로젝트 개요
+스파르타 게임클럽은 2024년 1월 4일부터 2024년 2월 8일까지 진행된 프로젝트입니다.
 
-## Available Scripts
+## 프로젝트 관련 링크
+- [스파르타 게임클럽 바로가기](https://game-community-project.github.io/front-end/)
+- [깃허브 백엔드 주소](https://github.com/game-community-project)
+- [깃허브 프론트 주소](https://github.com/game-community-project)
+- [팀 노션](https://www.notion.so/Sparta-GameClub-8499b67a86f140978ced7bad12ea08f5)
 
-In the project directory, you can run:
+## 아키텍처
+![image](https://github.com/game-community-project/game-community/assets/140589023/0f1be9a2-c34e-4a6e-b86b-72c2be567c19)
 
-### `npm start`
+## 주요 기능
+<details>
+<summary>회원가입 / 로그인</summary>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- 회원가입
+    - 이메일, 닉네임, 비밀번호를 입력해서 회원가입
+    - 회원가입 시 이메일 인증 필요
+- 로그인
+    - 소셜로그인 : 카카오 로그인
+</details>
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+<details>
+<summary>마이페이지 + 방명록</summary>
 
-### `npm test`
+- 유저 프로필
+    - 소개 등록
+    - 닉네임, 비밀번호, 프로필 수정
+- 유저 방명록
+    - 유저의 소개 등을 조회
+    - 유저에 대한 평가를 남김
+</details>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<details>
+<summary>게시판</summary>
 
-### `npm run build`
+- 게시판 CRUD 페이징(무한스크롤)
+- 좋아요 또는 싫어요 기능
+- 댓글 채택 시 게시글이 마감되는 기능
+</details>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<details>
+<summary>댓글</summary>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- 게시글에 댓글 CURD
+</details>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<details>
+<summary>팀</summary>
 
-### `npm run eject`
+- 유저는 팀을 생성할 수 있다.
+- 팀 관리자는 유저를 그룹에 초대, 추방
+- 팀 리스트 조회 기능
+- 본인이 속한 팀들 조회 기능
+- 팀 정보 수정 기능
+</details>
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+<details>
+<summary>관리자 페이지</summary>
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- 유저 조회
+- 유저 전체 조회
+</details>

@@ -15,13 +15,16 @@
 /*  */
 /*}*/
 
-/*.comment {*/
-/*  width: 100%; !* Take up the full width *!*/
-/*  !* Add other comment styles as needed *!*/
-/*  margin-bottom: 10px;*/
-/*  display: flex;*/
-/*  justify-content: space-between;*/
-/*}*/
+
+.gbComment {
+  width: 100%; /* Take up the full width */
+  max-width: 600px; /* Adjust the maximum width as needed */
+  /* Add other comment styles as needed */
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
 
 /*.actions {*/
 /*  display: flex;*/
@@ -37,8 +40,10 @@
 /*  */
 /*}*/
 
-/*.create {*/
-/*  float: right;*/
-/*  margin-left: 10px;*/
-/*  height: 35px;*/
-/*}*/
+
+.create {
+  float: right;
+  margin-left: 10px;
+  height: 35px;
+}
+
