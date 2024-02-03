@@ -30,7 +30,7 @@ const AddCommentForm: React.FC<Props> = ({ postId }) => {
         return;
       }
 
-      const response = await fetch(`http://localhost:8080/api/posts/${postId}/comments`, {
+      const response = await fetch(`https://spartagameclub.shop/api/posts/${postId}/comments`, {
         method: 'POST',
         body: JSON.stringify(commentRequestDto),
         headers: {

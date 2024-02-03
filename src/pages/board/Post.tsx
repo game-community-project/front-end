@@ -50,7 +50,7 @@ const Post: React.FC = () => {
   const getPost = async (id: string | undefined) => {
 
     try {
-      const res = await axios.get(`http://localhost:8080/api/posts/${postId}`);
+      const res = await axios.get(`https://spartagameclub.shop/api/posts/${postId}`);
       const postData = res.data.data;
 
       if (postData.postImageUrl) {
