@@ -82,11 +82,10 @@ const TeamInfo: React.FC = () => {
 
       if (res.status === 200) {
         alert('팀이 성공적으로 삭제되었습니다.');
-        navigate('/')
+        navigate('/');
       } else {
         console.error('팀 삭제에 실패했습니다.');
       }
-      window.location.reload();
     } catch (error) {
       console.error('에러:', error);
     }
