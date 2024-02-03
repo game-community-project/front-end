@@ -1,0 +1,55 @@
+/* Comment.css */
+
+
+.comments-container{
+  padding: 10px;
+}
+.comment {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 15px;
+  width: 80%;
+  flex-direction: column;
+
+}
+
+.comment p {
+  margin-bottom: 10px;
+}
+
+.comment textarea {
+  margin-top: 10px;
+}
+
+
+.reply {
+  position: relative;
+}
+
+
+
+.comment {
+  margin-bottom: 20px;
+}
+
+.child-comment {
+  margin-left: 20px;
+}
+
+.comment-button {
+  margin-bottom: 3px;
+}
+
+
+
+.edit-button, .delete-button {
+  margin-right: 5px;
+}
+.comment-reply-textarea{
+  margin-bottom: 5px;
+}
+.comment-reply-submit{
+  margin-bottom: 5px;
+}
+
+
