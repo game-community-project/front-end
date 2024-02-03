@@ -97,7 +97,7 @@ const Team: React.FC = () => {
 
   return (
       <div className="container mt-4">
-        <h1 className="mb-4">Team List</h1>
+        <h1 className="mb-4">팀 목록</h1>
 
         {isLoggedIn() && userTeams ? (
             <div>
