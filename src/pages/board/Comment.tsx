@@ -3,6 +3,7 @@ import { Button, Form } from 'react-bootstrap';
 import AddCommentForm from './AddCommentForm';
 import './Comment.css';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 interface CommentDto {
   commentId: number;
@@ -17,9 +18,10 @@ interface Props {
   comments: CommentDto[];
   postId?: string;
   getComments: (postId: string | undefined) => void;
+  getPost: (postId: string | undefined) => void;
 }
 
-const Comment: React.FC<Props> = ({ comments, postId,getComments }) => {
+const Comment: React.FC<Props> = ({ comments, postId, getComments, getPost }) => {
   const [isReplying, setIsReplying] = useState<{ [key: number]: boolean }>({});
   const [replyContent, setReplyContent] = useState<{ [key: number]: string }>({});
   const [editCommentId, setEditCommentId] = useState<number | null>(null);
@@ -157,66 +159,97 @@ const Comment: React.FC<Props> = ({ comments, postId,getComments }) => {
     } catch (error) {
       console.error('댓글 삭제 오류:', error);
     }
+  }
+
+  const handleAcceptComment = async (commentId: number) => {
+
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        console.error('액세스 토큰이 없습니다.');
+        alert('댓글을 채택하려면 로그인이 필요합니다.');
+        navigate('/login');
+        return;
+      }
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access': `${accessToken}`,
+        },
+      };
+
+      console.log(accessToken);
+      await axios.put(`https://spartagameclub.shop/api/posts/${postId}/comments/${commentId}/accept`, {}, config);
+      alert('댓글이 채택되었습니다. 해당 게시글은 마감됩니다.')
+      getPost(postId);
+      
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
-      <div className="comments-container">
-        {comments.map((comment) => (
-            <div key={comment.commentId} className={`comment ${comment.parentAuthor ? 'child-comment' : ''}`}>
-              <div>
-                <strong>{comment.author}</strong> | 작성시간: {comment.createdAt} | 수정시간: {comment.modifiedAt}
-                {comment.parentAuthor && <span> | 대댓글 대상: {comment.parentAuthor}</span>}
-              </div>
-              <div>{comment.content}</div>
-              <Button className="comment-button" variant="outline-secondary" onClick={() => handleReply(comment.commentId)}>
-                {isReplying[comment.commentId] ? '답글 작성 숨기기' : '답글 작성'}
-              </Button>
-              {isReplying[comment.commentId] && (
-                  <div className="reply-comment-box">
-                    <Form.Group controlId={`reply-${comment.commentId}`} className="mt-3">
-                      <Form.Control
-                          className={'comment-reply-textarea'}
-                          as="textarea"
-                          rows={3}
-                          placeholder="답글을 작성해 주세요."
-                          value={replyContent[comment.commentId] || ''}
-                          onChange={(e) => handleReplyContentChange(comment.commentId, e.target.value)}
-                      />
-                      <Button variant="primary" className={'comment-reply-submit'} onClick={() => handleSubmitReply(comment.commentId)}>
-                        답글 작성 완료
-                      </Button>
-                    </Form.Group>
-                  </div>
-              )}
-              <div className="comment-buttons">
-                <Button className="edit-button" variant="outline-info" onClick={() => handleUpdate(comment)}>
-                  수정
+    <div className="comments-container">
+      {comments.map((comment) => (
+        <div key={comment.commentId} className={`comment ${comment.parentAuthor ? 'child-comment' : ''}`}>
+          <div>
+            <strong>{comment.author}</strong> | 작성시간: {comment.createdAt} | 수정시간: {comment.modifiedAt}
+            {comment.parentAuthor && <span> | 대댓글 대상: {comment.parentAuthor}</span>}
+          </div>
+          <div>{comment.content}</div>
+          <Button className="comment-button" variant="outline-secondary" onClick={() => handleReply(comment.commentId)}>
+            {isReplying[comment.commentId] ? '답글 작성 숨기기' : '답글 작성'}
+          </Button>
+          {isReplying[comment.commentId] && (
+            <div className="reply-comment-box">
+              <Form.Group controlId={`reply-${comment.commentId}`} className="mt-3">
+                <Form.Control
+                  className={'comment-reply-textarea'}
+                  as="textarea"
+                  rows={3}
+                  placeholder="답글을 작성해 주세요."
+                  value={replyContent[comment.commentId] || ''}
+                  onChange={(e) => handleReplyContentChange(comment.commentId, e.target.value)}
+                />
+                <Button variant="primary" className={'comment-reply-submit'} onClick={() => handleSubmitReply(comment.commentId)}>
+                  답글 작성 완료
                 </Button>
-                <Button className="delete-button" variant="outline-danger" onClick={() => handleDelete(comment.commentId)}>
-                  삭제
-                </Button>
-              </div>
-              {editCommentId === comment.commentId && (
-                  <div className="edit-comment-form">
-                    <Form.Group controlId={`edit-${comment.commentId}`} className="mt-3">
-                      <Form.Control
-                          className={'edit-comment-textarea'}
-                          as="textarea"
-                          rows={3}
-                          placeholder="댓글을 수정해 주세요."
-                          value={editedCommentContent}
-                          onChange={(e) => setEditedCommentContent(e.target.value)}
-                      />
-                      <Button variant="primary" className={'edit-comment-submit'} onClick={() => handleUpdateSubmit(comment.commentId, editedCommentContent)}>
-                        수정 완료
-                      </Button>
-                    </Form.Group>
-                  </div>
-              )}
+              </Form.Group>
             </div>
-        ))}
-        {postId && <AddCommentForm postId={postId} getComments={getComments}/>}
-      </div>
+          )}
+          <div className="comment-buttons">
+            <Button className="accept-button" variant="outline-success" onClick={() => handleAcceptComment(comment.commentId)}>
+              채택
+            </Button>
+            <Button className="edit-button" variant="outline-info" onClick={() => handleUpdate(comment)}>
+              수정
+            </Button>
+            <Button className="delete-button" variant="outline-danger" onClick={() => handleDelete(comment.commentId)}>
+              삭제
+            </Button>
+          </div>
+          {editCommentId === comment.commentId && (
+            <div className="edit-comment-form">
+              <Form.Group controlId={`edit-${comment.commentId}`} className="mt-3">
+                <Form.Control
+                  className={'edit-comment-textarea'}
+                  as="textarea"
+                  rows={3}
+                  placeholder="댓글을 수정해 주세요."
+                  value={editedCommentContent}
+                  onChange={(e) => setEditedCommentContent(e.target.value)}
+                />
+                <Button variant="primary" className={'edit-comment-submit'} onClick={() => handleUpdateSubmit(comment.commentId, editedCommentContent)}>
+                  수정 완료
+                </Button>
+              </Form.Group>
+            </div>
+          )}
+        </div>
+      ))}
+      {postId && <AddCommentForm postId={postId} getComments={getComments} />}
+    </div>
   );
 };
 
