@@ -6,6 +6,8 @@ export interface UserDto {
 	ranking: number;
 	block_date: string;
 	guestBookList: GuestBookDto[];
+	userId: number,
+	//secondUserId: number;
 }
   
 export interface GuestBookDto {

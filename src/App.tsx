@@ -21,7 +21,8 @@ import UpdateTeam from "./pages/team/UpdateTeam";
 import Guestbook from './pages/guestbook/Guestbook';
 import UserList from './pages/admin/UserList';
 import OAuth from './pages/OAuth';
-
+import ChatRoom from './pages/chat/ChatRoom';
+import Chat from './pages/chat/Chat';
 
 function App() {
     return (
@@ -48,6 +49,8 @@ function App() {
                 <Route path='/profile_modify' Component={ProfileModify} />
                 <Route path='/guestbooks/:userId' Component={Guestbook} /> 
                 <Route path='/oauth' Component={OAuth} />
+                <Route path='/chatroom_list' Component={ChatRoom} /> 
+                <Route path='/chat/:userId' Component={Chat} /> 
             </Routes>
         </BrowserRouter>
     );

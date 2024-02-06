@@ -74,6 +74,11 @@
     color: white;
 }
 
+.btn-chat {
+    background-color: #ffdd00;
+    color: rgb(0, 0, 0);
+}
+
 .post-image {
     width: 100%;
     height: auto;

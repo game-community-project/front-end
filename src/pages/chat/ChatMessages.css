@@ -1,0 +1,78 @@
+
+/* 스타일링을 위한 기본 CSS */
+
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f2f2f2;
+}
+
+.chat-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  margin-bottom: 15px;
+}
+
+/* 채팅 목록 스타일 */
+
+.chat-list {
+  overflow-y: auto;
+  max-height: 300px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.chat-list li {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.chat-list li p {
+  margin: 0;
+}
+
+/* 메세지 입력 창 및 전송 버튼 스타일 */
+
+.message-input {
+  display: flex;
+  margin-top: 20px;
+}
+
+.message-input input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px 0 0 5px;
+}
+
+.message-input button {
+  padding: 8px 15px;
+  background-color: #4caf50;
+  color: #fff;
+  border: 1px solid #4caf50;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+}
+
+/* 더 필요한 스타일링이 있다면 추가하십시오. */
