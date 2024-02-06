@@ -26,8 +26,6 @@ interface CommentDto {
   parentAuthor:string;
 }
 
-
-
 const Post: React.FC = () => {
   const navigate = useNavigate();
   const {postId} = useParams();
@@ -76,7 +74,6 @@ const Post: React.FC = () => {
 
       const userId = postData.userId;
       if (userId) {
-        console.log('User ID:', userId);
         setUserId(userId);
       }
     } catch (error) {
@@ -87,6 +84,11 @@ const Post: React.FC = () => {
   const handleGoToGuestbook = () => {
     navigate(`/guestbooks/${userId}`)
   }
+
+  const handleGoToChat = () => {
+    navigate(`/chat/${userId}`);
+  }
+
 
   // 좋아요(true) 또는 싫어요(false)
   const isLike = async (isLike: boolean) => {
@@ -202,6 +204,9 @@ const Post: React.FC = () => {
                 <span className="post-stat">{post.postUnlike}</span>
               </div>
               <div className="edit-delete-buttons">
+              <button className="btn btn-chat" onClick={handleGoToChat}>
+                  채팅
+                </button>
                 <button className="btn btn-primary" onClick={handleGoToGuestbook}>
                   방명록
                 </button>

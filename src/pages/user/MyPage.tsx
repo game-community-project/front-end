@@ -9,11 +9,8 @@ import { useNavigate } from 'react-router-dom';
 
 const MyPage: React.FC = () => {
   const [user, setUser] = useState<UserDto | null>(null);
+  const [userId, setUserId] = useState<string>(''); 
   const navigate = useNavigate();
-
-  const handleGoToGuestbook  = () => {
-    navigate("/guestbook")
-  }
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -47,6 +44,10 @@ const MyPage: React.FC = () => {
 
   const goToProfileModify = () => {
     navigate("/profile_modify")
+  }
+
+  const goToChatList = () => {
+    navigate(`/chatroom_list`)
   }
 
   return (
@@ -88,6 +89,7 @@ const MyPage: React.FC = () => {
         <p>Loading...</p>
       )}
     <Button variant="warning" onClick={goToProfileModify}>수정</Button>
+    <Button variant="chat" onClick={goToChatList}>채팅방</Button>
     </div>
   );
 };
