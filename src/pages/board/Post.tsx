@@ -10,9 +10,6 @@ import unlikeImage from '../../images/unlike_image.png';
 import './Post.css';
 import Comment from './Comment';
 
-import {Button, Form} from 'react-bootstrap';
-
-
 const config = {
   bucketName: process.env.REACT_APP_AWS_BUCKET_NAME,
   region: process.env.REACT_APP_AWS_REGION,
@@ -138,7 +135,7 @@ const Post: React.FC = () => {
       };
 
       await axios.delete(`https://spartagameclub.shop/api/posts/${postId}`, config);
-      navigate(`/board`);
+      navigate(`/`);
 
     } catch (error) {
       console.error('에러:', error);
@@ -220,7 +217,7 @@ const Post: React.FC = () => {
                   삭제
                 </button>
               </div>
-              <Comment comments={comments} postId={postId} getComments={getComments} />
+              <Comment comments={comments} postId={postId} getComments={getComments} getPost={getPost} />
 
             </div>
         )}
