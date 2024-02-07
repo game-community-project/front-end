@@ -17,7 +17,7 @@ function Footer() {
         {/* 만든 사람 정보 */}
         <div className="footer-section">
           <h4>만든 사람</h4>
-          <p>이선오, 김민석, 손다희, 이원용</p>
+          <p>이선오, 김민성, 손다희, 이원용</p>
         </div>
       </div>
     </footer>
