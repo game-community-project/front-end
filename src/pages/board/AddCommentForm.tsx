@@ -45,6 +45,7 @@ const AddCommentForm: React.FC<Props> = ({ postId ,getComments}) => {
         console.log('댓글 작성 성공');
         alert('댓글 작성 성공');
         getComments(postId);
+        setCommentContent("");
       } else {
         console.error('댓글 작성 실패');
         alert('댓글 작성 실패');
