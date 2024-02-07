@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { TeamDto } from '../../dto/Team';
-import { Link, useNavigate } from 'react-router-dom';
+import {TeamDto} from '../../dto/Team';
+import {Link, useNavigate} from 'react-router-dom';
 
 import './Team.css';
 
@@ -99,7 +99,7 @@ const Team: React.FC = () => {
       <div className="container mt-4">
         <h1 className="mb-4">팀 목록</h1>
 
-        {isLoggedIn() && userTeams ? (
+        {isLoggedIn() && userTeams && userTeams.length > 0 ? (
             <div>
               <ul className="list-group">
                 {userTeams.map((team) => (
@@ -108,24 +108,26 @@ const Team: React.FC = () => {
                         <h2 className="team-name">{team.teamName}</h2>
                       </Link>
                       <p className="team-introduction">{team.teamIntroduction}</p>
-                      <button onClick={() => leaveTeam(team.teamId)} className="btn btn-danger">팀 탈퇴</button>
+                      <button onClick={() => leaveTeam(team.teamId)} className="btn btn-danger">팀
+                        탈퇴
+                      </button>
                     </li>
                 ))}
               </ul>
 
               <div className="pagination mt-3">
-                {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                {Array.from({length: totalPages}, (_, index) => index + 1).map((page) => (
                     <span
                         key={page}
                         className={`page-item ${page === currentPage ? "active" : ""}`}
                         onClick={() => handlePageChange(page)}
                     >
-                {page}
-              </span>
+              {page}
+            </span>
                 ))}
               </div>
             </div>
-        ) : teams ? (
+        ) : teams && teams.length > 0 ? (
             <div>
               <ul className="list-group">
                 {teams.map((team) => (
@@ -139,14 +141,14 @@ const Team: React.FC = () => {
               </ul>
 
               <div className="pagination mt-3">
-                {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                {Array.from({length: totalPages}, (_, index) => index + 1).map((page) => (
                     <span
                         key={page}
                         className={`page-item ${page === currentPage ? "active" : ""}`}
                         onClick={() => handlePageChange(page)}
                     >
-                {page}
-              </span>
+              {page}
+            </span>
                 ))}
               </div>
             </div>
